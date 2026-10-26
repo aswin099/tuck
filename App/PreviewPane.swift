@@ -2,6 +2,7 @@ import SwiftUI
 import TuckCore
 
 /// Right-hand pane in the popup showing the full selected item and its details.
+@MainActor
 struct PreviewPane: View {
     let item: ClipItem?
 

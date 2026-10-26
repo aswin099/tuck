@@ -27,6 +27,7 @@ struct TuckApp: App {
     }
 }
 
+@MainActor
 struct MenuContent: View {
     @ObservedObject var model: AppModel
 

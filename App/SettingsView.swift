@@ -4,6 +4,7 @@ import KeyboardShortcuts
 import UniformTypeIdentifiers
 import ApplicationServices
 
+@MainActor
 struct SettingsView: View {
     var body: some View {
         TabView {
@@ -26,6 +27,7 @@ struct SettingsView: View {
 
 // MARK: - General
 
+@MainActor
 private struct GeneralSettings: View {
     @AppStorage(Pref.autoPaste) private var autoPaste = true
     @State private var launchAtLogin = SMAppService.mainApp.status == .enabled
@@ -92,6 +94,7 @@ private struct GeneralSettings: View {
 
 // MARK: - History
 
+@MainActor
 private struct HistorySettings: View {
     @AppStorage(Pref.historyLimit) private var historyLimit = 200
     @AppStorage(Pref.retentionDays) private var retentionDays = 0
@@ -204,6 +207,7 @@ private struct HistorySettings: View {
 
 // MARK: - Popup
 
+@MainActor
 private struct PopupSettings: View {
     @AppStorage(Pref.popupPosition) private var position = PopupPosition.cursor
     @AppStorage(Pref.showPreview) private var showPreview = false
@@ -243,6 +247,7 @@ private struct PopupSettings: View {
 
 // MARK: - Privacy
 
+@MainActor
 private struct PrivacySettings: View {
     @AppStorage(Pref.skipConcealed) private var skipConcealed = true
     @AppStorage(Pref.secretHandling) private var secretHandling = SecretHandling.hide
@@ -342,6 +347,7 @@ private struct PrivacySettings: View {
     }
 }
 
+@MainActor
 private struct IgnoredAppsList: View {
     let apps: [String]
     @Binding var selection: String?
@@ -378,6 +384,7 @@ private struct IgnoredAppsList: View {
 
 // MARK: - About
 
+@MainActor
 private struct AboutSettings: View {
     private var version: String {
         let info = Bundle.main.infoDictionary
