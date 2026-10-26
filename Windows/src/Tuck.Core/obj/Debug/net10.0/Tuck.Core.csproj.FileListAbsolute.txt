@@ -1,0 +1,12 @@
+/Users/aswin/Documents/repository/tuck/Windows/src/Tuck.Core/bin/Debug/net10.0/Tuck.Core.deps.json
+/Users/aswin/Documents/repository/tuck/Windows/src/Tuck.Core/bin/Debug/net10.0/Tuck.Core.dll
+/Users/aswin/Documents/repository/tuck/Windows/src/Tuck.Core/bin/Debug/net10.0/Tuck.Core.pdb
+/Users/aswin/Documents/repository/tuck/Windows/src/Tuck.Core/obj/Debug/net10.0/Tuck.Core.GeneratedMSBuildEditorConfig.editorconfig
+/Users/aswin/Documents/repository/tuck/Windows/src/Tuck.Core/obj/Debug/net10.0/Tuck.Core.AssemblyInfoInputs.cache
+/Users/aswin/Documents/repository/tuck/Windows/src/Tuck.Core/obj/Debug/net10.0/Tuck.Core.AssemblyInfo.cs
+/Users/aswin/Documents/repository/tuck/Windows/src/Tuck.Core/obj/Debug/net10.0/Tuck.Core.csproj.CoreCompileInputs.cache
+/Users/aswin/Documents/repository/tuck/Windows/src/Tuck.Core/obj/Debug/net10.0/Tuck.Core.sourcelink.json
+/Users/aswin/Documents/repository/tuck/Windows/src/Tuck.Core/obj/Debug/net10.0/Tuck.Core.dll
+/Users/aswin/Documents/repository/tuck/Windows/src/Tuck.Core/obj/Debug/net10.0/refint/Tuck.Core.dll
+/Users/aswin/Documents/repository/tuck/Windows/src/Tuck.Core/obj/Debug/net10.0/Tuck.Core.pdb
+/Users/aswin/Documents/repository/tuck/Windows/src/Tuck.Core/obj/Debug/net10.0/ref/Tuck.Core.dll
