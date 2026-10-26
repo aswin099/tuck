@@ -61,9 +61,13 @@ jobs:
           brew install xcodegen
           xcodegen generate
           # macOS version numbers only allow digits and dots, so drop a "-preview" suffix here.
+          set -o pipefail
           xcodebuild -project Tuck.xcodeproj -scheme Tuck -configuration Release \
             -derivedDataPath build CODE_SIGN_IDENTITY=- \
-            MARKETING_VERSION="$(echo "${GITHUB_REF_NAME#v}" | cut -d- -f1)" build
+            MARKETING_VERSION="$(echo "${GITHUB_REF_NAME#v}" | cut -d- -f1)" build 2>&1 | tee build.log || {
+            grep -E "error:" build.log | sort -u | head -25 | while IFS= read -r line; do echo "::error::$line"; done
+            exit 1
+          }
 
       - name: Zip
         run: ditto -c -k --keepParent build/Build/Products/Release/Tuck.app Tuck-macOS.zip
