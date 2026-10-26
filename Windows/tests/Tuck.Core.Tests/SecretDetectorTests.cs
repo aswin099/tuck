@@ -2,13 +2,14 @@ namespace Tuck.Core.Tests;
 
 public class SecretDetectorTests
 {
-    [Theory]
-    [InlineData("AKIAIOSFODNN7EXAMPLE", SecretKind.AwsKey)]
-    [InlineData("xoxb-1234567890-abcdefghij", SecretKind.SlackToken)]
-    [InlineData("eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMjM0NTY3ODkwIn0.dozjgNryP4J3jVmNHl0w5N_XgL0n3I9PlFUP0THsR8U", SecretKind.Jwt)]
-    [InlineData("-----BEGIN OPENSSH PRIVATE KEY-----\nabc\n", SecretKind.PrivateKey)]
-    public void KnownTokenFormats(string text, SecretKind expected) =>
-        Assert.Equal(expected, SecretDetector.Detect(text));
+    [Fact]
+    public void KnownTokenFormats()
+    {
+        Assert.Equal(SecretKind.AwsKey, SecretDetector.Detect(FakeSecrets.AwsKey));
+        Assert.Equal(SecretKind.SlackToken, SecretDetector.Detect(FakeSecrets.SlackToken));
+        Assert.Equal(SecretKind.Jwt, SecretDetector.Detect(FakeSecrets.Jwt));
+        Assert.Equal(SecretKind.PrivateKey, SecretDetector.Detect(FakeSecrets.PrivateKeyHeader));
+    }
 
     [Fact]
     public void GeneratedTokenFormats()
@@ -21,7 +22,7 @@ public class SecretDetectorTests
 
     [Fact]
     public void TokenInsideLongerTextIsFound() =>
-        Assert.Equal(SecretKind.AwsKey, SecretDetector.Detect("set AWS_KEY=AKIAIOSFODNN7EXAMPLE"));
+        Assert.Equal(SecretKind.AwsKey, SecretDetector.Detect("set AWS_KEY=" + FakeSecrets.AwsKey));
 
     [Fact]
     public void CardNumberNeedsValidLuhn()
@@ -35,9 +36,9 @@ public class SecretDetectorTests
     [Fact]
     public void GeneratedPasswordIsFlagged()
     {
-        Assert.Equal(SecretKind.RandomToken, SecretDetector.Detect("Xk9#mQ2$vL7pR4wZ"));
-        Assert.Equal(SecretKind.RandomToken, SecretDetector.Detect("aB3dE5fG7hJ9kL1mN3pQ5rS"));
-        Assert.Null(SecretDetector.Detect("Xk9#mQ2$vL7pR4wZ", includeRandomTokens: false));
+        Assert.Equal(SecretKind.RandomToken, SecretDetector.Detect(FakeSecrets.RandomPasswordWithSymbols));
+        Assert.Equal(SecretKind.RandomToken, SecretDetector.Detect(FakeSecrets.RandomPassword));
+        Assert.Null(SecretDetector.Detect(FakeSecrets.RandomPasswordWithSymbols, includeRandomTokens: false));
     }
 
     [Theory]

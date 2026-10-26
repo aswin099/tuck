@@ -39,7 +39,7 @@ public class SearchTests
     [Fact]
     public void SecretContentIsNotSearchable()
     {
-        var secret = ClipItem.Create(ClipKind.Text, "hunter2-Xk9#mQ2$vL7p", secretKind: SecretKind.RandomToken);
+        var secret = ClipItem.Create(ClipKind.Text, "hunter2-" + FakeSecrets.RandomPassword, secretKind: SecretKind.RandomToken);
         Assert.Empty(Search.Filter([secret], "hunter2"));
         Assert.Single(Search.Filter([secret], "password"));
     }

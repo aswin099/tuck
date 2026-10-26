@@ -3,21 +3,18 @@ import XCTest
 
 final class SecretDetectorTests: XCTestCase {
     func testKnownTokenFormats() {
-        XCTAssertEqual(SecretDetector.detect("AKIAIOSFODNN7EXAMPLE"), .awsKey)
+        XCTAssertEqual(SecretDetector.detect(FakeSecrets.awsKey), .awsKey)
         XCTAssertEqual(SecretDetector.detect("ghp_" + String(repeating: "a1B2", count: 9)), .githubToken)
-        XCTAssertEqual(SecretDetector.detect("xoxb-1234567890-abcdefghij"), .slackToken)
+        XCTAssertEqual(SecretDetector.detect(FakeSecrets.slackToken), .slackToken)
         XCTAssertEqual(SecretDetector.detect("sk_live_" + String(repeating: "x9", count: 12)), .stripeKey)
         XCTAssertEqual(SecretDetector.detect("sk-ant-" + String(repeating: "Ab3_", count: 10)), .aiApiKey)
         XCTAssertEqual(SecretDetector.detect("AIza" + String(repeating: "B", count: 35)), .googleApiKey)
-        XCTAssertEqual(
-            SecretDetector.detect("eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMjM0NTY3ODkwIn0.dozjgNryP4J3jVmNHl0w5N_XgL0n3I9PlFUP0THsR8U"),
-            .jwt
-        )
-        XCTAssertEqual(SecretDetector.detect("-----BEGIN OPENSSH PRIVATE KEY-----\nabc\n"), .privateKey)
+        XCTAssertEqual(SecretDetector.detect(FakeSecrets.jwt), .jwt)
+        XCTAssertEqual(SecretDetector.detect(FakeSecrets.privateKeyHeader), .privateKey)
     }
 
     func testTokenInsideLongerTextIsFound() {
-        XCTAssertEqual(SecretDetector.detect("export AWS_KEY=AKIAIOSFODNN7EXAMPLE"), .awsKey)
+        XCTAssertEqual(SecretDetector.detect("export AWS_KEY=" + FakeSecrets.awsKey), .awsKey)
     }
 
     func testCardNumberNeedsValidLuhn() {
@@ -28,9 +25,9 @@ final class SecretDetectorTests: XCTestCase {
     }
 
     func testGeneratedPasswordIsFlagged() {
-        XCTAssertEqual(SecretDetector.detect("Xk9#mQ2$vL7pR4wZ"), .randomToken)
-        XCTAssertEqual(SecretDetector.detect("aB3dE5fG7hJ9kL1mN3pQ5rS"), .randomToken)
-        XCTAssertNil(SecretDetector.detect("Xk9#mQ2$vL7pR4wZ", includeRandomTokens: false))
+        XCTAssertEqual(SecretDetector.detect(FakeSecrets.randomPasswordWithSymbols), .randomToken)
+        XCTAssertEqual(SecretDetector.detect(FakeSecrets.randomPassword), .randomToken)
+        XCTAssertNil(SecretDetector.detect(FakeSecrets.randomPasswordWithSymbols, includeRandomTokens: false))
     }
 
     func testOrdinaryTextIsNotFlagged() {
