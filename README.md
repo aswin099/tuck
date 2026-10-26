@@ -99,6 +99,8 @@ Branches: `develop` for day-to-day work, `staging` for testing a release, `main`
 | `Packages/TuckCore/Sources/TuckCore` | Models, history store, search, ignore rules. No AppKit, fully testable |
 | `Packages/TuckCore/Tests/TuckCoreTests` | Unit tests |
 | `App/` | SwiftUI and AppKit app: menu bar, popup panel, pasteboard monitor, paster, settings |
+| `App/Assets.xcassets` | App icon and menu bar glyphs |
+| `tools/render-icon.swift` | Draws the icon and glyphs; run `swift tools/render-icon.swift App/Assets.xcassets` after changing them |
 | `project.yml` | XcodeGen spec |
 | `PRODUCT.md`, `DESIGN.md` | Product spec and design system |
 
@@ -106,7 +108,6 @@ Branches: `develop` for day-to-day work, `staging` for testing a release, `main`
 History is stored in `~/Library/Application Support/Tuck/history.tuck`, readable only by your user and encrypted with AES-256-GCM. The key is created on first run and kept in your login Keychain as a device-only item (never synced to iCloud). Items Tuck hides as secrets are kept in memory only and never written to disk. A plain-text `history.json` from an earlier version is encrypted automatically on first launch. If the Keychain can't be used, Tuck keeps history in memory only rather than writing it unencrypted. Encryption protects the file at rest; it does not protect against other software running as your user, so keep using the ignore list for sensitive apps.
 
 ## Roadmap
-- Real menu bar glyph and app icon assets
 - Thumbnail cache for image items
 - Rich text support and plain-text paste (⌥↩)
 - SQLite storage
