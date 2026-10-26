@@ -9,6 +9,8 @@
     <AssemblyName>Tuck</AssemblyName>
     <RootNamespace>Tuck.App</RootNamespace>
     <ApplicationManifest>app.manifest</ApplicationManifest>
+    <!-- Icon for Tuck.exe in File Explorer, the taskbar, Start and Alt+Tab. Drawn by tools/render-icon.swift. -->
+    <ApplicationIcon>Assets\Tuck.ico</ApplicationIcon>
     <Product>Tuck</Product>
     <Description>Clipboard manager for Windows. Local-only, keyboard-first.</Description>
     <!-- WPF0001: Application.ThemeMode (Windows 11 style controls) is marked experimental in .NET 10.
@@ -22,6 +24,11 @@
     <!-- WPF and Windows Forms both define Application, Clipboard, MessageBox and more. Use WPF's by default. -->
     <Using Remove="System.Windows.Forms" />
     <Using Remove="System.Drawing" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Window, About-tab and notification-area icons, loaded with pack:// URIs. -->
+    <Resource Include="Assets\*.ico" />
   </ItemGroup>
 
   <ItemGroup>

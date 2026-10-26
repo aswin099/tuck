@@ -126,7 +126,7 @@ Releases: push a version tag such as `v0.2.0`. GitHub Actions then builds the ma
 | `Packages/TuckCore/Tests/TuckCoreTests` | Unit tests |
 | `App/` | SwiftUI and AppKit app: menu bar, popup panel, pasteboard monitor, paster, settings |
 | `App/Assets.xcassets` | App icon and menu bar glyphs |
-| `tools/render-icon.swift` | Draws the icon and glyphs; run `swift tools/render-icon.swift App/Assets.xcassets` after changing them |
+| `tools/render-icon.swift` | Draws the macOS and Windows icons from one design; after changing it, run `swift tools/render-icon.swift App/Assets.xcassets Windows/src/Tuck.App/Assets` on a Mac |
 | `project.yml` | XcodeGen spec |
 | `Windows/src/Tuck.Core` | Windows core logic in C#, mirroring TuckCore. No Windows APIs, fully testable |
 | `Windows/tests/Tuck.Core.Tests` | Windows core unit tests |

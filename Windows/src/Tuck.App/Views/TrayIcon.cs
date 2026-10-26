@@ -17,8 +17,8 @@ internal sealed class TrayIcon : IDisposable
 {
     private readonly AppController _controller;
     private readonly Forms.NotifyIcon _icon;
-    private readonly System.Drawing.Icon _normal = TrayArt.Icon(paused: false);
-    private readonly System.Drawing.Icon _paused = TrayArt.Icon(paused: true);
+    private readonly System.Drawing.Icon _normal = AppIcons.Tray(paused: false);
+    private readonly System.Drawing.Icon _paused = AppIcons.Tray(paused: true);
 
     public TrayIcon(AppController controller)
     {

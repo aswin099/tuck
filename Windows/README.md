@@ -80,12 +80,14 @@ The core library and its tests also build and run on macOS and Linux. The app bu
 | `src/Tuck.App/Platform` | Win32 interop: clipboard listener, global hotkeys, Ctrl+V simulation, DPAPI, sign-in startup |
 | `src/Tuck.App/ViewModels` | `AppController` (the twin of `AppModel` on macOS) and the item view model |
 | `src/Tuck.App/Views` | Popup, preview pane, Settings window, tray icon |
+| `src/Tuck.App/Assets` | `Tuck.ico` (app and windows) and the tray icons, drawn by `tools/render-icon.swift` |
 
 ## Things to check on first test
 
 These parts are written against Windows APIs that can't be exercised from macOS:
 
-- [ ] Tray icon appears; left-click opens the popup, right-click opens the menu
+- [ ] Tuck.exe shows the Tuck icon in File Explorer, the taskbar and Alt+Tab
+- [ ] Tray icon appears (grey while paused); left-click opens the popup, right-click opens the menu
 - [ ] Ctrl+Shift+V opens the popup at the mouse pointer, on each monitor and at different display scaling
 - [ ] Copying text, links, images and files adds them; copying from KeePass or Bitwarden does not
 - [ ] Enter pastes into the app you were in; Ctrl+Alt+V pastes the next queued item

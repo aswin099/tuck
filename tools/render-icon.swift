@@ -1,5 +1,7 @@
-// Renders Tuck's app icon and menu bar glyph from vector drawing code.
-// Usage: swift tools/render-icon.swift App/Assets.xcassets
+// Renders Tuck's icons from vector drawing code, so macOS and Windows stay in sync.
+// Usage: swift tools/render-icon.swift App/Assets.xcassets [Windows/src/Tuck.App/Assets]
+//   macOS:   AppIcon (all sizes), MenuBarIcon and MenuBarIconPaused template glyphs
+//   Windows: Tuck.ico (exe and windows), TrayIcon.ico and TrayIconPaused.ico (notification area)
 // Design (DESIGN.md): indigo tile, a card tucked into a pocket, amber pin dot.
 import AppKit
 
@@ -8,12 +10,30 @@ let indigo500 = NSColor(srgbRed: 0x8E / 255, green: 0x94 / 255, blue: 0xF2 / 255
 let indigo200 = NSColor(srgbRed: 0xC9 / 255, green: 0xCC / 255, blue: 0xFF / 255, alpha: 1)
 let amber400 = NSColor(srgbRed: 0xFF / 255, green: 0xB5 / 255, blue: 0x47 / 255, alpha: 1)
 
+struct Palette {
+    var tile, backCard, frontCard, pocket, lines, dot: NSColor
+}
+
+let colorPalette = Palette(tile: indigo700, backCard: indigo200, frontCard: .white, pocket: indigo500,
+                           lines: indigo700.withAlphaComponent(0.22), dot: amber400)
+/// Grey version for the paused Windows tray icon.
+let pausedPalette = Palette(tile: NSColor(white: 0.45, alpha: 1), backCard: NSColor(white: 0.82, alpha: 1),
+                            frontCard: NSColor(white: 0.97, alpha: 1), pocket: NSColor(white: 0.68, alpha: 1),
+                            lines: NSColor(white: 0, alpha: 0.2), dot: NSColor(white: 0.75, alpha: 1))
+
+/// Drawing options for the platform and size being rendered.
+var palette = colorPalette
+var useShadows = true      // macOS icons have soft shadows; Windows icons are flat.
+var showDetail = true      // Text lines, pin dot and stitching blur away below ~48 px, so small sizes omit them.
+var tileRadius: CGFloat = 185
+
 /// Pixels per drawing unit for the image being rendered. NSShadow sizes are in pixels and
 /// don't follow the drawing scale, so shadows multiply by this to look the same at every size.
 var pixelScale: CGFloat = 1
 
 func makeShadow(alpha: CGFloat, offsetY: CGFloat, blur: CGFloat) -> NSShadow {
     let shadow = NSShadow()
+    guard useShadows else { return shadow }
     shadow.shadowColor = NSColor.black.withAlphaComponent(alpha)
     shadow.shadowOffset = NSSize(width: 0, height: offsetY * pixelScale)
     shadow.shadowBlurRadius = blur * pixelScale
@@ -24,11 +44,11 @@ func makeShadow(alpha: CGFloat, offsetY: CGFloat, blur: CGFloat) -> NSShadow {
 func drawIcon() {
     // macOS icon grid: 824×824 tile centered in the 1024 canvas, corner radius ~185.
     let tile = NSRect(x: 100, y: 100, width: 824, height: 824)
-    let tilePath = NSBezierPath(roundedRect: tile, xRadius: 185, yRadius: 185)
+    let tilePath = NSBezierPath(roundedRect: tile, xRadius: tileRadius, yRadius: tileRadius)
 
     NSGraphicsContext.saveGraphicsState()
     makeShadow(alpha: 0.28, offsetY: -10, blur: 24).set()
-    indigo700.setFill()
+    palette.tile.setFill()
     tilePath.fill()
     NSGraphicsContext.restoreGraphicsState()
 
@@ -36,9 +56,9 @@ func drawIcon() {
     tilePath.addClip()
 
     // Back card, tilted left.
-    drawCard(center: NSPoint(x: 470, y: 560), size: NSSize(width: 360, height: 440), angle: 9, color: indigo200, lines: false)
+    drawCard(center: NSPoint(x: 470, y: 560), size: NSSize(width: 360, height: 440), angle: 9, color: palette.backCard, lines: false)
     // Front card, tilted right, with text lines and the pin dot.
-    drawCard(center: NSPoint(x: 560, y: 585), size: NSSize(width: 360, height: 440), angle: -6, color: .white, lines: true)
+    drawCard(center: NSPoint(x: 560, y: 585), size: NSSize(width: 360, height: 440), angle: -6, color: palette.frontCard, lines: showDetail)
 
     // Pocket: covers the lower part of the cards.
     let pocket = NSBezierPath()
@@ -51,10 +71,14 @@ func drawIcon() {
     pocket.close()
     NSGraphicsContext.saveGraphicsState()
     makeShadow(alpha: 0.25, offsetY: 8, blur: 18).set()
-    indigo500.setFill()
+    palette.pocket.setFill()
     pocket.fill()
     NSGraphicsContext.restoreGraphicsState()
 
+    guard showDetail else {
+        NSGraphicsContext.restoreGraphicsState()
+        return
+    }
     // Stitching along the pocket's top edge: 11 whole dashes, centered on the pocket.
     let stitch = NSBezierPath()
     stitch.move(to: NSPoint(x: 281, y: 488))
@@ -62,7 +86,7 @@ func drawIcon() {
     stitch.lineWidth = 10
     stitch.lineCapStyle = .round
     stitch.setLineDash([22, 22], count: 2, phase: 0)
-    indigo200.withAlphaComponent(0.85).setStroke()
+    palette.backCard.withAlphaComponent(0.85).setStroke()
     stitch.stroke()
 
     NSGraphicsContext.restoreGraphicsState()
@@ -82,13 +106,13 @@ func drawCard(center: NSPoint, size: NSSize, angle: CGFloat, color: NSColor, lin
     NSShadow().set()
 
     if lines {
-        indigo700.withAlphaComponent(0.22).setFill()
+        palette.lines.setFill()
         let left = rect.minX + 48
         for (i, width) in [200.0, 250.0, 170.0].enumerated() {
             let y = rect.maxY - 120 - CGFloat(i) * 56
             NSBezierPath(roundedRect: NSRect(x: left, y: y, width: width, height: 22), xRadius: 11, yRadius: 11).fill()
         }
-        amber400.setFill()
+        palette.dot.setFill()
         NSBezierPath(ovalIn: NSRect(x: rect.maxX - 92, y: rect.maxY - 92, width: 44, height: 44)).fill()
     }
     NSGraphicsContext.restoreGraphicsState()
@@ -117,6 +141,36 @@ func drawGlyph(alpha: CGFloat = 1) {
     NSRect(x: 0, y: 7.2, width: 18, height: 1.4).fill()
     NSGraphicsContext.current?.compositingOperation = .sourceOver
     NSBezierPath(roundedRect: NSRect(x: 2.0, y: 1.6, width: 14.0, height: 5.6), xRadius: 2.2, yRadius: 2.2).fill()
+}
+
+/// Windows icons fill more of their square than macOS icons and have gentler corners.
+func drawWindowsIcon() {
+    let scale: CGFloat = 952 / 824  // macOS tile (824) grown to a 952 tile, 36 units from each edge.
+    let t = NSAffineTransform()
+    t.translateX(by: 512, yBy: 512)
+    t.scale(by: scale)
+    t.translateX(by: -512, yBy: -512)
+    t.concat()
+    drawIcon()
+}
+
+/// Writes a Windows .ico file with one PNG-compressed image per size (supported since Windows Vista).
+func writeICO(_ entries: [(size: Int, png: Data)], to url: URL) throws {
+    var data = Data()
+    func le16(_ v: Int) { data.append(contentsOf: [UInt8(v & 0xff), UInt8((v >> 8) & 0xff)]) }
+    func le32(_ v: Int) { le16(v & 0xffff); le16((v >> 16) & 0xffff) }
+    le16(0); le16(1); le16(entries.count)
+    var offset = 6 + 16 * entries.count
+    for entry in entries {
+        data.append(UInt8(entry.size >= 256 ? 0 : entry.size))  // 0 means 256
+        data.append(UInt8(entry.size >= 256 ? 0 : entry.size))
+        data.append(0); data.append(0)  // no palette, reserved
+        le16(1); le16(32)                // planes, bits per pixel
+        le32(entry.png.count); le32(offset)
+        offset += entry.png.count
+    }
+    for entry in entries { data.append(entry.png) }
+    try data.write(to: url)
 }
 
 func png(pixels: Int, points: CGFloat, draw: () -> Void) -> Data {
@@ -167,3 +221,26 @@ for (set, alpha) in [("MenuBarIcon", 1.0), ("MenuBarIconPaused", 0.4)] as [(Stri
 }
 
 print("Wrote \(images.count) app icon sizes and the menu bar glyphs to \(catalog.path)")
+
+// Windows
+if CommandLine.arguments.count > 2 {
+    let windows = URL(fileURLWithPath: CommandLine.arguments[2])
+    try? fm.createDirectory(at: windows, withIntermediateDirectories: true)
+    useShadows = false
+    tileRadius = 150
+
+    func render(_ sizes: [Int], palette chosen: Palette) -> [(size: Int, png: Data)] {
+        palette = chosen
+        return sizes.map { size in
+            showDetail = size >= 48
+            return (size, png(pixels: size, points: 1024, draw: drawWindowsIcon))
+        }
+    }
+    // App icon: every size Windows asks for across Explorer views and display scaling.
+    try writeICO(render([16, 20, 24, 32, 40, 48, 64, 96, 128, 256], palette: colorPalette),
+                 to: windows.appendingPathComponent("Tuck.ico"))
+    // Notification area: 16 px at 100% scaling up to 32 px at 200%.
+    try writeICO(render([16, 20, 24, 32, 40, 48], palette: colorPalette), to: windows.appendingPathComponent("TrayIcon.ico"))
+    try writeICO(render([16, 20, 24, 32, 40, 48], palette: pausedPalette), to: windows.appendingPathComponent("TrayIconPaused.ico"))
+    print("Wrote Tuck.ico, TrayIcon.ico and TrayIconPaused.ico to \(windows.path)")
+}
