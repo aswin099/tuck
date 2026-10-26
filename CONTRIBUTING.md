@@ -15,5 +15,11 @@ xcodegen generate
 open Tuck.xcodeproj
 ```
 
+## Issues and pull requests
+- Use the **Bug report** or **Feature request** form when opening an issue.
+- Open pull requests against `develop`. The pull request template has a short checklist.
+- Report security problems privately, as described in [SECURITY.md](SECURITY.md).
+- Everyone taking part follows the [code of conduct](CODE_OF_CONDUCT.md).
+
 ## Commit messages
 Short imperative summary on the first line, details after a blank line if needed.
