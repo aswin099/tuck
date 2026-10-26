@@ -1,0 +1,26 @@
+name: CI
+
+on:
+  push:
+    branches: [main, staging, develop]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Test TuckCore
+        run: swift test --package-path Packages/TuckCore
+
+      - name: Install XcodeGen
+        run: brew install xcodegen
+
+      - name: Generate Xcode project
+        run: xcodegen generate
+
+      - name: Build app
+        run: >
+          xcodebuild -project Tuck.xcodeproj -scheme Tuck
+          -destination 'platform=macOS' CODE_SIGNING_ALLOWED=NO build

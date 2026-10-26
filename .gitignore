@@ -1,0 +1,36 @@
+.DS_Store
+.build/
+.swiftpm/
+DerivedData/
+xcuserdata/
+*.xcodeproj
+App/Info.plist
+.impeccable/config.local.json
+.impeccable/*.png
+
+# Local tool settings
+.claude/settings.local.json
+.idea/
+.vscode/
+
+# Build and release output
+build/
+dist/
+*.xcarchive
+*.dmg
+Tuck.app.zip
+
+# Signing material and secrets: never commit these
+*.p12
+*.cer
+*.certSigningRequest
+*.mobileprovision
+*.provisionprofile
+*.pem
+.env
+.env.*
+ExportOptions.plist
+
+# Local Tuck data, in case it is copied here while debugging
+history.tuck
+history.json

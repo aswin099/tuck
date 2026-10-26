@@ -1,0 +1,45 @@
+# XcodeGen spec. Run `xcodegen generate` to create Tuck.xcodeproj (not committed).
+name: Tuck
+options:
+  bundleIdPrefix: dev.tuck
+  deploymentTarget:
+    macOS: "14.0"
+packages:
+  TuckCore:
+    path: Packages/TuckCore
+  KeyboardShortcuts:
+    url: https://github.com/sindresorhus/KeyboardShortcuts
+    from: "2.0.0"
+targets:
+  Tuck:
+    type: application
+    platform: macOS
+    sources:
+      - App
+    dependencies:
+      - package: TuckCore
+      - package: KeyboardShortcuts
+    info:
+      path: App/Info.plist
+      properties:
+        CFBundleDisplayName: Tuck
+        LSUIElement: true
+        LSMinimumSystemVersion: "14.0"
+        NSHumanReadableCopyright: "Copyright © 2026 Aswin Ravichandran. MIT License."
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: dev.tuck.Tuck
+        SWIFT_VERSION: "5.0"
+        MARKETING_VERSION: "0.1.0"
+        CURRENT_PROJECT_VERSION: "1"
+        ENABLE_HARDENED_RUNTIME: YES
+        CODE_SIGN_STYLE: Automatic
+        # Not sandboxed: simulating ⌘V needs the Accessibility permission,
+        # which the App Sandbox does not allow.
+schemes:
+  Tuck:
+    build:
+      targets:
+        Tuck: all
+    run:
+      config: Debug
