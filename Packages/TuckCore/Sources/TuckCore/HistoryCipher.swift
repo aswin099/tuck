@@ -9,7 +9,9 @@ public protocol HistoryCipher: Sendable {
 
 /// AES-256-GCM. The output is nonce, ciphertext and tag in one blob, so any
 /// change to the file makes `open` fail instead of returning altered history.
-public struct AESGCMCipher: HistoryCipher {
+/// `@unchecked` because older SDKs don't mark `SymmetricKey` as Sendable; it is
+/// an immutable value, so sharing it across threads is safe.
+public struct AESGCMCipher: HistoryCipher, @unchecked Sendable {
     private let key: SymmetricKey
 
     public init(key: SymmetricKey) {

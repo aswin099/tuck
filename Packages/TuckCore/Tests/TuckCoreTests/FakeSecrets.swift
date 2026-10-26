@@ -16,16 +16,31 @@ enum FakeSecrets {
         "fake" + "Signature" + "ForTests",
     ].joined(separator: ".")
 
+    // Built in plain loops: older Swift compilers time out type-checking these as one chained expression.
+
     /// A generated-looking password: lower, upper and digit in turn (24 characters).
-    static let randomPassword = (0..<8).map { i in
-        letter("a", offset: i * 3 % 26) + letter("B", offset: i * 5 % 25) + String((i * 7 + 3) % 10)
-    }.joined()
+    static let randomPassword: String = {
+        var result = ""
+        for i in 0..<8 {
+            result += letter("a", offset: i * 3 % 26)
+            result += letter("B", offset: i * 5 % 25)
+            result += String((i * 7 + 3) % 10)
+        }
+        return result
+    }()
 
     /// Like `randomPassword` but with symbols (16 characters).
-    static let randomPasswordWithSymbols = (0..<4).map { i in
-        letter("X", offset: -i * 5) + letter("k", offset: i * 3) + String((i * 3 + 9) % 10)
-            + String(Array("#$%&")[i])
-    }.joined()
+    static let randomPasswordWithSymbols: String = {
+        let symbols: [Character] = ["#", "$", "%", "&"]
+        var result = ""
+        for i in 0..<4 {
+            result += letter("X", offset: -5 * i)
+            result += letter("k", offset: 3 * i)
+            result += String((3 * i + 9) % 10)
+            result.append(symbols[i])
+        }
+        return result
+    }()
 
     private static func letter(_ base: Character, offset: Int) -> String {
         String(UnicodeScalar(UInt8(Int(base.asciiValue!) + offset)))
