@@ -13,11 +13,9 @@ struct TuckApp: App {
         MenuBarExtra {
             MenuContent(model: model)
         } label: {
-            // TODO: replace the system symbol with the Tuck menu bar template glyph.
-            if model.queue.isEmpty {
-                Image(systemName: model.isPaused ? "tray" : "tray.full")
-            } else {
-                Image(systemName: "tray.and.arrow.down.fill")
+            // Template glyphs from Assets.xcassets (drawn by tools/render-icon.swift); dimmed while paused.
+            Image(model.isPaused ? "MenuBarIconPaused" : "MenuBarIcon")
+            if !model.queue.isEmpty {
                 Text("\(model.queue.count)")
             }
         }
