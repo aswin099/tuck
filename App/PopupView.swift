@@ -12,6 +12,7 @@ extension Color {
     static let tuckAmber = Color(red: 1.0, green: 0.71, blue: 0.28)
 }
 
+@MainActor
 struct PopupView: View {
     @EnvironmentObject private var model: AppModel
     @FocusState private var searchFocused: Bool
@@ -151,6 +152,7 @@ struct PopupView: View {
     }
 }
 
+@MainActor
 private struct KeyHint: View {
     let key: String
     let label: String
@@ -166,6 +168,7 @@ private struct KeyHint: View {
     }
 }
 
+@MainActor
 private struct EmptyState: View {
     let isSearching: Bool
 
@@ -188,6 +191,7 @@ private struct EmptyState: View {
 }
 
 /// Shown above the list while the paste queue has items or is collecting copies.
+@MainActor
 private struct QueueBanner: View {
     @EnvironmentObject private var model: AppModel
 
@@ -224,6 +228,7 @@ private struct QueueBanner: View {
     }
 }
 
+@MainActor
 struct ItemRow: View {
     let item: ClipItem
     let index: Int
@@ -295,6 +300,7 @@ struct ItemRow: View {
 }
 
 /// Source app icon and name plus how long ago the item was copied.
+@MainActor
 private struct ItemMetadata: View {
     let item: ClipItem
 

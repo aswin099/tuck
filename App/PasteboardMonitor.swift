@@ -22,7 +22,8 @@ final class PasteboardMonitor {
         self.interval = interval
         timer?.invalidate()
         timer = Timer.scheduledTimer(withTimeInterval: interval, repeats: true) { [weak self] _ in
-            Task { @MainActor in self?.poll() }
+            // Scheduled on the main run loop, so this already runs on the main thread.
+            MainActor.assumeIsolated { self?.poll() }
         }
     }
 

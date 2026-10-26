@@ -100,10 +100,12 @@ final class AppModel: ObservableObject {
         defaultsObserver = NotificationCenter.default.addObserver(
             forName: UserDefaults.didChangeNotification, object: nil, queue: .main
         ) { [weak self] _ in
-            Task { @MainActor in self?.applySettings() }
+            // Delivered on the main queue, so no hop is needed.
+            MainActor.assumeIsolated { self?.applySettings() }
         }
         pruneTimer = Timer.scheduledTimer(withTimeInterval: 15, repeats: true) { [weak self] _ in
-            Task { @MainActor in self?.prune() }
+            // Scheduled on the main run loop, so this already runs on the main thread.
+            MainActor.assumeIsolated { self?.prune() }
         }
         prune()
         refresh()

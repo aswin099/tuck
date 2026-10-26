@@ -4,6 +4,8 @@ options:
   bundleIdPrefix: dev.tuck
   deploymentTarget:
     macOS: "14.0"
+  # Write a project file Xcode 15 can open (newer XcodeGen defaults to Xcode 16's format).
+  projectFormat: xcode15_0
 packages:
   TuckCore:
     path: Packages/TuckCore
@@ -23,6 +25,8 @@ targets:
       path: App/Info.plist
       properties:
         CFBundleDisplayName: Tuck
+        CFBundleShortVersionString: "$(MARKETING_VERSION)"
+        CFBundleVersion: "$(CURRENT_PROJECT_VERSION)"
         LSUIElement: true
         LSMinimumSystemVersion: "14.0"
         NSHumanReadableCopyright: "Copyright © 2026 Aswin Ravichandran. MIT License."
