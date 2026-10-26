@@ -2,7 +2,8 @@ name: Release
 
 # Push a version tag (for example `git tag v0.2.0 && git push origin v0.2.0`) to build
 # Tuck for macOS and Windows and create a draft GitHub Release with both downloads.
-# Review the draft on GitHub, then click Publish.
+# Review the draft on GitHub, then click Publish. Tags with a suffix, such as
+# v0.2.0-preview.1, become pre-releases.
 on:
   push:
     tags: ["v*"]
@@ -59,9 +60,10 @@ jobs:
         run: |
           brew install xcodegen
           xcodegen generate
+          # macOS version numbers only allow digits and dots, so drop a "-preview" suffix here.
           xcodebuild -project Tuck.xcodeproj -scheme Tuck -configuration Release \
             -derivedDataPath build CODE_SIGN_IDENTITY=- \
-            MARKETING_VERSION="${GITHUB_REF_NAME#v}" build
+            MARKETING_VERSION="$(echo "${GITHUB_REF_NAME#v}" | cut -d- -f1)" build
 
       - name: Zip
         run: ditto -c -k --keepParent build/Build/Products/Release/Tuck.app Tuck-macOS.zip
@@ -83,7 +85,9 @@ jobs:
       - name: Create draft release
         env:
           GH_TOKEN: ${{ github.token }}
-        run: >
-          gh release create "$GITHUB_REF_NAME" --repo "$GITHUB_REPOSITORY" --draft
-          --title "Tuck $GITHUB_REF_NAME" --generate-notes
-          Tuck-macOS.zip Tuck-Windows-x64.zip Tuck-Windows-arm64.zip
+        run: |
+          prerelease=""
+          if [[ "$GITHUB_REF_NAME" == *-* ]]; then prerelease="--prerelease"; fi
+          gh release create "$GITHUB_REF_NAME" --repo "$GITHUB_REPOSITORY" --draft $prerelease \
+            --title "Tuck $GITHUB_REF_NAME" --generate-notes \
+            Tuck-macOS.zip Tuck-Windows-x64.zip Tuck-Windows-arm64.zip
