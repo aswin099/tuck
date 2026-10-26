@@ -1,0 +1,89 @@
+name: Release
+
+# Push a version tag (for example `git tag v0.2.0 && git push origin v0.2.0`) to build
+# Tuck for macOS and Windows and create a draft GitHub Release with both downloads.
+# Review the draft on GitHub, then click Publish.
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  windows:
+    name: Windows downloads
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        arch: [x64, arm64]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Test Tuck.Core
+        run: dotnet test Windows/tests/Tuck.Core.Tests --configuration Release
+
+      - name: Publish single-file Tuck.exe
+        shell: pwsh
+        run: >
+          dotnet publish Windows/src/Tuck.App --configuration Release
+          --runtime win-${{ matrix.arch }} --self-contained true
+          -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true
+          -p:EnableCompressionInSingleFile=true -p:DebugType=none
+          -p:Version=$("${{ github.ref_name }}".TrimStart("v"))
+          --output publish/${{ matrix.arch }}
+
+      - name: Zip
+        shell: pwsh
+        run: Compress-Archive -Path publish/${{ matrix.arch }}/Tuck.exe -DestinationPath Tuck-Windows-${{ matrix.arch }}.zip
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: windows-${{ matrix.arch }}
+          path: Tuck-Windows-${{ matrix.arch }}.zip
+
+  macos:
+    name: macOS download
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Test TuckCore
+        run: swift test --package-path Packages/TuckCore
+
+      - name: Build Tuck.app
+        run: |
+          brew install xcodegen
+          xcodegen generate
+          xcodebuild -project Tuck.xcodeproj -scheme Tuck -configuration Release \
+            -derivedDataPath build CODE_SIGN_IDENTITY=- \
+            MARKETING_VERSION="${GITHUB_REF_NAME#v}" build
+
+      - name: Zip
+        run: ditto -c -k --keepParent build/Build/Products/Release/Tuck.app Tuck-macOS.zip
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: macos
+          path: Tuck-macOS.zip
+
+  release:
+    name: Draft GitHub Release
+    needs: [windows, macos]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          merge-multiple: true
+
+      - name: Create draft release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: >
+          gh release create "$GITHUB_REF_NAME" --repo "$GITHUB_REPOSITORY" --draft
+          --title "Tuck $GITHUB_REF_NAME" --generate-notes
+          Tuck-macOS.zip Tuck-Windows-x64.zip Tuck-Windows-arm64.zip

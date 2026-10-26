@@ -1,0 +1,14 @@
+<Project>
+  <!-- Shared settings for every project in the Windows solution. -->
+  <PropertyGroup>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <Version>0.1.0</Version>
+    <Authors>Aswin Ravichandran</Authors>
+    <Copyright>Copyright © 2026 Aswin Ravichandran. MIT License.</Copyright>
+    <!-- Lets the WPF app build on macOS and Linux (for CI and development). It only runs on Windows. -->
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
+  </PropertyGroup>
+</Project>

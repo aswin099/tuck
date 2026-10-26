@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- Tuck.Core holds all logic that does not need Windows APIs (models, history
+       store, search, ignore rules, secret detection, paste queue) so it can be
+       unit-tested on any OS with `dotnet test`. It mirrors Packages/TuckCore on macOS. -->
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <RootNamespace>Tuck.Core</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="Tuck.Core.Tests" />
+  </ItemGroup>
+
+</Project>

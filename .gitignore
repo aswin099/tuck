@@ -34,3 +34,12 @@ ExportOptions.plist
 # Local Tuck data, in case it is copied here while debugging
 history.tuck
 history.json
+
+# .NET (Windows app)
+bin/
+obj/
+.vs/
+*.user
+*.suo
+TestResults/
+publish/

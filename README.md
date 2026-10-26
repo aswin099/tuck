@@ -1,6 +1,6 @@
 # Tuck
 
-A free, open-source clipboard manager for macOS. Local-only, keyboard-first, MIT licensed.
+A free, open-source clipboard manager for macOS, with a Windows version in preview. Local-only, keyboard-first, MIT licensed.
 
 > Status: early preview (v0.1). It builds and runs, and the core library has unit tests, but it hasn't had much real-world use yet. Expect rough edges and please [report problems](https://github.com/aswin099/tuck/issues).
 
@@ -18,11 +18,13 @@ A free, open-source clipboard manager for macOS. Local-only, keyboard-first, MIT
 
 ## Install
 
+These steps are for the Mac. On a Windows PC, see [Windows (preview)](#windows-preview).
+
 You need **macOS 14 Sonoma or later**. There are two ways to install Tuck.
 
 ### Option 1: Download the app (easiest)
 
-1. Open the [Releases page](https://github.com/aswin099/tuck/releases) and download `Tuck.zip` from the latest release. If there is no release yet, use Option 2.
+1. Open the [Releases page](https://github.com/aswin099/tuck/releases) and download `Tuck-macOS.zip` from the latest release. If there is no release yet, use Option 2.
 2. Unzip it and drag **Tuck.app** into your **Applications** folder.
 3. Open Tuck. Because Tuck is not signed by Apple, macOS shows *"Apple could not verify Tuck is free of malware"*. Click **Done** (not Move to Trash).
 4. Open **System Settings → Privacy & Security**, scroll down to the message about Tuck and click **Open Anyway**. Confirm with your password or Touch ID.
@@ -79,6 +81,21 @@ Quit Tuck from its menu bar icon, replace **Tuck.app** in Applications with the 
 4. Optional: open **Keychain Access**, search for **Tuck history key** and delete it.
 5. Optional: remove Tuck from **System Settings → Privacy & Security → Accessibility**.
 
+## Windows (preview)
+
+> **Not tested on Windows yet.** The Windows version is built from the same design and passes its unit tests, but nobody has run it on a Windows PC yet. Please [report what you find](https://github.com/aswin099/tuck/issues).
+
+It has the same features as the Mac app, with Windows shortcuts. Full details are in [Windows/README.md](Windows/README.md).
+
+**Install:** you need Windows 10 or 11.
+1. From the [Releases page](https://github.com/aswin099/tuck/releases), download `Tuck-Windows-x64.zip` (most PCs) or `Tuck-Windows-arm64.zip` (Windows on ARM, such as Surface Pro X and Snapdragon laptops).
+2. Unzip it and move **Tuck.exe** somewhere permanent, such as a `Tuck` folder in your user folder.
+3. Double-click **Tuck.exe**. Windows may show *"Windows protected your PC"* because Tuck isn't signed. Click **More info**, then **Run anyway**. You only need to do this once per version.
+
+**Use it:** Tuck lives in the notification area next to the clock. Press **Ctrl+Shift+V** to open it. No special permission is needed to paste.
+
+**Uninstall:** right-click the Tuck icon → Quit Tuck, delete **Tuck.exe**, and delete the folder `%LOCALAPPDATA%\Tuck` to remove your history. If you turned on "Open Tuck when you sign in", turn it off first in Settings.
+
 ## Development
 
 Requirements: Xcode 15.4 or later and XcodeGen (see Option 2).
@@ -89,9 +106,18 @@ xcodegen generate                             # create Tuck.xcodeproj (not commi
 open Tuck.xcodeproj                           # press Run in Xcode
 ```
 
+The Windows app needs the [.NET 10 SDK](https://dotnet.microsoft.com/download). Its core tests also run on macOS and Linux:
+
+```bash
+dotnet test Windows/tests/Tuck.Core.Tests     # run the Windows core unit tests
+dotnet build Windows/Tuck.Windows.slnx        # build the app (it runs only on Windows)
+```
+
 If Xcode shows a signing error when you press Run, select the **Tuck** target → **Signing & Capabilities** and choose your Personal Team, or set Signing Certificate to **Sign to Run Locally**.
 
 Branches: `develop` for day-to-day work, `staging` for testing a release, `main` for released code. Open pull requests against `develop`.
+
+Releases: push a version tag such as `v0.2.0`. GitHub Actions then builds the macOS and Windows downloads and creates a draft release to review and publish.
 
 ## Project layout
 | Path | Purpose |
@@ -100,6 +126,9 @@ Branches: `develop` for day-to-day work, `staging` for testing a release, `main`
 | `Packages/TuckCore/Tests/TuckCoreTests` | Unit tests |
 | `App/` | SwiftUI and AppKit app: menu bar, popup panel, pasteboard monitor, paster, settings |
 | `project.yml` | XcodeGen spec |
+| `Windows/src/Tuck.Core` | Windows core logic in C#, mirroring TuckCore. No Windows APIs, fully testable |
+| `Windows/tests/Tuck.Core.Tests` | Windows core unit tests |
+| `Windows/src/Tuck.App` | WPF app: tray icon, popup, clipboard monitor, hotkeys, paster, settings |
 | `PRODUCT.md`, `DESIGN.md` | Product spec and design system |
 
 ## Privacy

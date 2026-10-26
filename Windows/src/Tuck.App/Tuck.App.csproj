@@ -1,0 +1,35 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <!-- Only for the notification-area icon (NotifyIcon) and screen work areas. -->
+    <UseWindowsForms>true</UseWindowsForms>
+    <AssemblyName>Tuck</AssemblyName>
+    <RootNamespace>Tuck.App</RootNamespace>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <Product>Tuck</Product>
+    <Description>Clipboard manager for Windows. Local-only, keyboard-first.</Description>
+    <!-- WPF0001: Application.ThemeMode (Windows 11 style controls) is marked experimental in .NET 10.
+         WFO0003: a Windows Forms rule; this is a WPF app, where per-monitor DPI belongs in app.manifest. -->
+    <NoWarn>$(NoWarn);WPF0001;WFO0003</NoWarn>
+    <!-- Needed by the code that [LibraryImport] generates for the Win32 calls. -->
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- WPF and Windows Forms both define Application, Clipboard, MessageBox and more. Use WPF's by default. -->
+    <Using Remove="System.Windows.Forms" />
+    <Using Remove="System.Drawing" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Security.Cryptography.ProtectedData" Version="10.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Tuck.Core\Tuck.Core.csproj" />
+  </ItemGroup>
+
+</Project>

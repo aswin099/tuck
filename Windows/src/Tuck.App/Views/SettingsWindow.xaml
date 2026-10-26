@@ -1,0 +1,373 @@
+<Window x:Class="Tuck.App.Views.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:views="clr-namespace:Tuck.App.Views"
+        Title="Tuck Settings"
+        Width="600" Height="640" MinWidth="520" MinHeight="420"
+        WindowStartupLocation="CenterScreen"
+        FontFamily="{StaticResource Tuck.Font}" FontSize="13"
+        UseLayoutRounding="True">
+    <Window.Resources>
+        <Style x:Key="SectionHeader" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Margin" Value="2,18,0,6" />
+        </Style>
+        <Style x:Key="Card" TargetType="Border">
+            <Setter Property="Background" Value="{DynamicResource Tuck.SurfaceAlt}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource Tuck.Border}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="6" />
+        </Style>
+        <Style x:Key="Row" TargetType="Grid">
+            <Setter Property="Margin" Value="14,10" />
+            <Setter Property="MinHeight" Value="32" />
+        </Style>
+        <Style x:Key="RowSeparator" TargetType="Border">
+            <Setter Property="Height" Value="1" />
+            <Setter Property="Background" Value="{DynamicResource Tuck.Border}" />
+        </Style>
+        <Style x:Key="Footnote" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+            <Setter Property="Margin" Value="2,6,0,0" />
+            <Setter Property="Foreground" Value="{DynamicResource Tuck.TextSecondary}" />
+        </Style>
+        <Style x:Key="RowLabel" TargetType="TextBlock">
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+        </Style>
+        <Style x:Key="RowDescription" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+            <Setter Property="Margin" Value="0,2,0,0" />
+            <Setter Property="Foreground" Value="{DynamicResource Tuck.TextSecondary}" />
+        </Style>
+        <Style x:Key="Warning" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+            <Setter Property="Margin" Value="0,4,0,0" />
+            <Setter Property="Foreground" Value="{DynamicResource Tuck.Warning}" />
+        </Style>
+        <Style TargetType="ComboBox" BasedOn="{StaticResource {x:Type ComboBox}}">
+            <Setter Property="MinWidth" Value="200" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="DisplayMemberPath" Value="Label" />
+            <Setter Property="SelectedValuePath" Value="Value" />
+        </Style>
+        <Style TargetType="CheckBox" BasedOn="{StaticResource {x:Type CheckBox}}">
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+        <Style TargetType="ScrollViewer" BasedOn="{StaticResource {x:Type ScrollViewer}}">
+            <Setter Property="VerticalScrollBarVisibility" Value="Auto" />
+        </Style>
+    </Window.Resources>
+
+    <TabControl Margin="12">
+        <!-- General -->
+        <TabItem Header="General">
+            <ScrollViewer>
+                <StackPanel Margin="8,0,8,16">
+                    <TextBlock Text="Keyboard shortcuts" Style="{StaticResource SectionHeader}" />
+                    <Border Style="{StaticResource Card}">
+                        <StackPanel>
+                            <Grid Style="{StaticResource Row}">
+                                <Grid.ColumnDefinitions><ColumnDefinition /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                                <StackPanel VerticalAlignment="Center">
+                                    <TextBlock Text="Open Tuck" Style="{StaticResource RowLabel}" />
+                                    <TextBlock Text="Another app is using this shortcut. Choose a different one." Style="{StaticResource Warning}"
+                                               Visibility="{Binding PopupHotkeyOk, Converter={StaticResource BoolToVisibility}, ConverterParameter=invert}" />
+                                </StackPanel>
+                                <views:HotkeyBox Grid.Column="1" Hotkey="{Binding Settings.PopupHotkey}" RecordingChanged="OnRecordingChanged"
+                                                 AutomationProperties.Name="Shortcut to open Tuck" />
+                            </Grid>
+                            <Border Style="{StaticResource RowSeparator}" />
+                            <Grid Style="{StaticResource Row}">
+                                <Grid.ColumnDefinitions><ColumnDefinition /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                                <StackPanel VerticalAlignment="Center">
+                                    <TextBlock Text="Paste next from queue" Style="{StaticResource RowLabel}" />
+                                    <TextBlock Text="Another app is using this shortcut. Choose a different one." Style="{StaticResource Warning}"
+                                               Visibility="{Binding PasteNextHotkeyOk, Converter={StaticResource BoolToVisibility}, ConverterParameter=invert}" />
+                                </StackPanel>
+                                <views:HotkeyBox Grid.Column="1" Hotkey="{Binding Settings.PasteNextHotkey}" RecordingChanged="OnRecordingChanged"
+                                                 AutomationProperties.Name="Shortcut to paste the next queued item" />
+                            </Grid>
+                            <Border Style="{StaticResource RowSeparator}" />
+                            <Grid Style="{StaticResource Row}">
+                                <Grid.ColumnDefinitions><ColumnDefinition /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                                <StackPanel VerticalAlignment="Center">
+                                    <TextBlock Text="Start or stop collecting" Style="{StaticResource RowLabel}" />
+                                    <TextBlock Text="Another app is using this shortcut. Choose a different one." Style="{StaticResource Warning}"
+                                               Visibility="{Binding ToggleCollectingHotkeyOk, Converter={StaticResource BoolToVisibility}, ConverterParameter=invert}" />
+                                </StackPanel>
+                                <views:HotkeyBox Grid.Column="1" Hotkey="{Binding Settings.ToggleCollectingHotkey}" RecordingChanged="OnRecordingChanged"
+                                                 AutomationProperties.Name="Shortcut to start or stop collecting copies" />
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+                    <TextBlock Text="Click a shortcut, then press the new keys. Backspace removes it." Style="{StaticResource Footnote}" />
+
+                    <TextBlock Text="Pasting" Style="{StaticResource SectionHeader}" />
+                    <Border Style="{StaticResource Card}">
+                        <Grid Style="{StaticResource Row}">
+                            <Grid.ColumnDefinitions><ColumnDefinition /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                            <StackPanel VerticalAlignment="Center">
+                                <TextBlock Text="Paste into the active app" Style="{StaticResource RowLabel}" />
+                                <TextBlock>
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock" BasedOn="{StaticResource RowDescription}">
+                                            <Setter Property="Text" Value="Tuck copies the item and you press Ctrl+V yourself." />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Settings.AutoPaste}" Value="True">
+                                                    <Setter Property="Text" Value="Tuck presses Ctrl+V for you after you pick an item." />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+                            </StackPanel>
+                            <CheckBox Grid.Column="1" IsChecked="{Binding Settings.AutoPaste}" AutomationProperties.Name="Paste into the active app" />
+                        </Grid>
+                    </Border>
+
+                    <TextBlock Text="Startup" Style="{StaticResource SectionHeader}" />
+                    <Border Style="{StaticResource Card}">
+                        <Grid Style="{StaticResource Row}">
+                            <Grid.ColumnDefinitions><ColumnDefinition /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                            <TextBlock Text="Open Tuck when you sign in" Style="{StaticResource RowLabel}" />
+                            <CheckBox Grid.Column="1" IsChecked="{Binding LaunchAtLogin}" AutomationProperties.Name="Open Tuck when you sign in" />
+                        </Grid>
+                    </Border>
+                </StackPanel>
+            </ScrollViewer>
+        </TabItem>
+
+        <!-- History -->
+        <TabItem Header="History">
+            <ScrollViewer>
+                <StackPanel Margin="8,0,8,16">
+                    <TextBlock Text="Storage" Style="{StaticResource SectionHeader}" />
+                    <Border Style="{StaticResource Card}">
+                        <StackPanel>
+                            <Grid Style="{StaticResource Row}">
+                                <Grid.ColumnDefinitions><ColumnDefinition /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                                <TextBlock Text="Keep up to" Style="{StaticResource RowLabel}" />
+                                <ComboBox Grid.Column="1" ItemsSource="{x:Static views:SettingsOptions.HistoryLimits}"
+                                          SelectedValue="{Binding Settings.HistoryLimit}" AutomationProperties.Name="Keep up to" />
+                            </Grid>
+                            <Border Style="{StaticResource RowSeparator}" />
+                            <Grid Style="{StaticResource Row}">
+                                <Grid.ColumnDefinitions><ColumnDefinition /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                                <TextBlock Text="Delete items after" Style="{StaticResource RowLabel}" />
+                                <ComboBox Grid.Column="1" ItemsSource="{x:Static views:SettingsOptions.RetentionDays}"
+                                          SelectedValue="{Binding Settings.RetentionDays}" AutomationProperties.Name="Delete items after" />
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+                    <TextBlock Text="Pinned items are never deleted automatically." Style="{StaticResource Footnote}" />
+
+                    <TextBlock Text="Save these kinds of items" Style="{StaticResource SectionHeader}" />
+                    <Border Style="{StaticResource Card}">
+                        <StackPanel>
+                            <Grid Style="{StaticResource Row}">
+                                <Grid.ColumnDefinitions><ColumnDefinition /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                                <TextBlock Text="Text" Style="{StaticResource RowLabel}" />
+                                <CheckBox Grid.Column="1" IsChecked="{Binding Settings.RecordText}" AutomationProperties.Name="Save text" />
+                            </Grid>
+                            <Border Style="{StaticResource RowSeparator}" />
+                            <Grid Style="{StaticResource Row}">
+                                <Grid.ColumnDefinitions><ColumnDefinition /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                                <TextBlock Text="Links" Style="{StaticResource RowLabel}" />
+                                <CheckBox Grid.Column="1" IsChecked="{Binding Settings.RecordLinks}" AutomationProperties.Name="Save links" />
+                            </Grid>
+                            <Border Style="{StaticResource RowSeparator}" />
+                            <Grid Style="{StaticResource Row}">
+                                <Grid.ColumnDefinitions><ColumnDefinition /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                                <TextBlock Text="Images" Style="{StaticResource RowLabel}" />
+                                <CheckBox Grid.Column="1" IsChecked="{Binding Settings.RecordImages}" AutomationProperties.Name="Save images" />
+                            </Grid>
+                            <Border Style="{StaticResource RowSeparator}" />
+                            <Grid Style="{StaticResource Row}">
+                                <Grid.ColumnDefinitions><ColumnDefinition /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                                <TextBlock Text="Files" Style="{StaticResource RowLabel}" />
+                                <CheckBox Grid.Column="1" IsChecked="{Binding Settings.RecordFiles}" AutomationProperties.Name="Save files" />
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+
+                    <TextBlock Text="Your history" Style="{StaticResource SectionHeader}" />
+                    <Border Style="{StaticResource Card}">
+                        <StackPanel>
+                            <Grid Style="{StaticResource Row}">
+                                <Grid.ColumnDefinitions><ColumnDefinition /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                                <TextBlock Text="Saved items" Style="{StaticResource RowLabel}" />
+                                <TextBlock Grid.Column="1" Text="{Binding SavedItemsText}" VerticalAlignment="Center"
+                                           Foreground="{DynamicResource Tuck.TextSecondary}" />
+                            </Grid>
+                            <Border Style="{StaticResource RowSeparator}" />
+                            <Grid Style="{StaticResource Row}">
+                                <Grid.ColumnDefinitions><ColumnDefinition /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                                <TextBlock Text="Storage" Style="{StaticResource RowLabel}" />
+                                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                                    <TextBlock x:Name="StorageGlyph" FontFamily="{StaticResource Tuck.Icons}" FontSize="12" Margin="0,1,6,0" />
+                                    <TextBlock x:Name="StorageLabel" />
+                                </StackPanel>
+                            </Grid>
+                            <Border Style="{StaticResource RowSeparator}" />
+                            <Grid Style="{StaticResource Row}">
+                                <Grid.ColumnDefinitions><ColumnDefinition Width="Auto" /><ColumnDefinition /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                                <Button Content="Open data folder" Padding="12,4" Click="OnOpenDataFolder" />
+                                <Button Grid.Column="2" Content="Clear History…" Padding="12,4" Click="OnClearHistory" />
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+                    <TextBlock x:Name="StorageFootnote" Style="{StaticResource Footnote}" />
+                </StackPanel>
+            </ScrollViewer>
+        </TabItem>
+
+        <!-- Popup -->
+        <TabItem Header="Popup">
+            <ScrollViewer>
+                <StackPanel Margin="8,0,8,16">
+                    <TextBlock Text="Window" Style="{StaticResource SectionHeader}" />
+                    <Border Style="{StaticResource Card}">
+                        <StackPanel>
+                            <Grid Style="{StaticResource Row}">
+                                <Grid.ColumnDefinitions><ColumnDefinition /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                                <TextBlock Text="Open popup" Style="{StaticResource RowLabel}" />
+                                <ComboBox Grid.Column="1" ItemsSource="{x:Static views:SettingsOptions.PopupPositions}"
+                                          SelectedValue="{Binding Settings.PopupPosition}" AutomationProperties.Name="Open popup" />
+                            </Grid>
+                            <Border Style="{StaticResource RowSeparator}" />
+                            <Grid Style="{StaticResource Row}">
+                                <Grid.ColumnDefinitions><ColumnDefinition /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                                <StackPanel VerticalAlignment="Center">
+                                    <TextBlock Text="Show preview pane" Style="{StaticResource RowLabel}" />
+                                    <TextBlock Text="Press Alt+P in the popup to show or hide it." Style="{StaticResource RowDescription}" />
+                                </StackPanel>
+                                <CheckBox Grid.Column="1" IsChecked="{Binding Settings.ShowPreview}" AutomationProperties.Name="Show preview pane" />
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+
+                    <TextBlock Text="Items" Style="{StaticResource SectionHeader}" />
+                    <Border Style="{StaticResource Card}">
+                        <StackPanel>
+                            <Grid Style="{StaticResource Row}">
+                                <Grid.ColumnDefinitions><ColumnDefinition /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                                <TextBlock Text="Lines of text" Style="{StaticResource RowLabel}" />
+                                <ComboBox Grid.Column="1" MinWidth="90" ItemsSource="{x:Static views:SettingsOptions.RowLines}"
+                                          SelectedValue="{Binding Settings.RowLines}" AutomationProperties.Name="Lines of text" />
+                            </Grid>
+                            <Border Style="{StaticResource RowSeparator}" />
+                            <Grid Style="{StaticResource Row}">
+                                <Grid.ColumnDefinitions><ColumnDefinition /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                                <TextBlock Text="Show source app and time" Style="{StaticResource RowLabel}" />
+                                <CheckBox Grid.Column="1" IsChecked="{Binding Settings.ShowMetadata}" AutomationProperties.Name="Show source app and time" />
+                            </Grid>
+                            <Border Style="{StaticResource RowSeparator}" />
+                            <Grid Style="{StaticResource Row}">
+                                <Grid.ColumnDefinitions><ColumnDefinition /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                                <TextBlock Text="Show keyboard hints" Style="{StaticResource RowLabel}" />
+                                <CheckBox Grid.Column="1" IsChecked="{Binding Settings.ShowKeyHints}" AutomationProperties.Name="Show keyboard hints" />
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </ScrollViewer>
+        </TabItem>
+
+        <!-- Privacy -->
+        <TabItem Header="Privacy">
+            <ScrollViewer>
+                <StackPanel Margin="8,0,8,16">
+                    <TextBlock Text="Password managers" Style="{StaticResource SectionHeader}" />
+                    <Border Style="{StaticResource Card}">
+                        <Grid Style="{StaticResource Row}">
+                            <Grid.ColumnDefinitions><ColumnDefinition /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                            <StackPanel VerticalAlignment="Center" Margin="0,0,12,0">
+                                <TextBlock Text="Skip items from password managers" Style="{StaticResource RowLabel}" />
+                                <TextBlock Text="Apps like KeePass, 1Password and Bitwarden mark copied passwords so clipboard managers and Windows clipboard history skip them."
+                                           Style="{StaticResource RowDescription}" />
+                            </StackPanel>
+                            <CheckBox Grid.Column="1" IsChecked="{Binding Settings.SkipConcealed}" AutomationProperties.Name="Skip items from password managers" />
+                        </Grid>
+                    </Border>
+
+                    <TextBlock Text="Secrets" Style="{StaticResource SectionHeader}" />
+                    <Border Style="{StaticResource Card}">
+                        <StackPanel>
+                            <Grid Style="{StaticResource Row}">
+                                <Grid.ColumnDefinitions><ColumnDefinition /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                                <TextBlock Text="When a copy looks like a password or key" Style="{StaticResource RowLabel}" Margin="0,0,12,0" />
+                                <ComboBox Grid.Column="1" ItemsSource="{x:Static views:SettingsOptions.SecretHandlings}"
+                                          SelectedValue="{Binding Settings.SecretHandling}" AutomationProperties.Name="When a copy looks like a password or key" />
+                            </Grid>
+                            <Border Style="{StaticResource RowSeparator}" />
+                            <Grid Style="{StaticResource Row}" IsEnabled="{Binding Settings.IsHidingSecrets}">
+                                <Grid.ColumnDefinitions><ColumnDefinition /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                                <TextBlock Text="Delete hidden items after" Style="{StaticResource RowLabel}" />
+                                <ComboBox Grid.Column="1" ItemsSource="{x:Static views:SettingsOptions.SecretLifetimes}"
+                                          SelectedValue="{Binding Settings.SecretLifetimeMinutes}" AutomationProperties.Name="Delete hidden items after" />
+                            </Grid>
+                            <Border Style="{StaticResource RowSeparator}" />
+                            <Grid Style="{StaticResource Row}" IsEnabled="{Binding Settings.DetectsSecrets}">
+                                <Grid.ColumnDefinitions><ColumnDefinition /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                                <StackPanel VerticalAlignment="Center" Margin="0,0,12,0">
+                                    <TextBlock Text="Also detect random-looking passwords" Style="{StaticResource RowLabel}" />
+                                    <TextBlock Text="Catches generated passwords and keys without a known format. Might flag some ordinary codes."
+                                               Style="{StaticResource RowDescription}" />
+                                </StackPanel>
+                                <CheckBox Grid.Column="1" IsChecked="{Binding Settings.DetectRandomTokens}" AutomationProperties.Name="Also detect random-looking passwords" />
+                            </Grid>
+                            <Border Style="{StaticResource RowSeparator}" />
+                            <Grid Style="{StaticResource Row}">
+                                <Grid.ColumnDefinitions><ColumnDefinition /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                                <TextBlock Text="Clear the clipboard after pasting a secret" Style="{StaticResource RowLabel}" />
+                                <CheckBox Grid.Column="1" IsChecked="{Binding Settings.ClearAfterSecretPaste}" AutomationProperties.Name="Clear the clipboard after pasting a secret" />
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+                    <TextBlock Text="Tuck recognizes API keys, access tokens, private keys and card numbers. Detection runs on your PC. Secrets Tuck pastes are kept out of Windows clipboard history (Win+V)."
+                               Style="{StaticResource Footnote}" />
+
+                    <TextBlock Text="Ignored apps" Style="{StaticResource SectionHeader}" />
+                    <Border Style="{StaticResource Card}">
+                        <StackPanel>
+                            <Grid MinHeight="60">
+                                <ListBox x:Name="IgnoredList" ItemsSource="{Binding Settings.IgnoredApps}" MaxHeight="160"
+                                         BorderThickness="0" Background="Transparent" Margin="6"
+                                         AutomationProperties.Name="Ignored apps" />
+                                <TextBlock Text="No ignored apps" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                           Foreground="{DynamicResource Tuck.TextSecondary}"
+                                           Visibility="{Binding Settings.IgnoredApps.Count, Converter={StaticResource ZeroToVisible}}" />
+                            </Grid>
+                            <Border Style="{StaticResource RowSeparator}" />
+                            <StackPanel Orientation="Horizontal" Margin="10,8">
+                                <Button Content="Add app…" Padding="12,4" Click="OnAddIgnoredApp" />
+                                <Button Content="Remove" Padding="12,4" Margin="8,0,0,0" Click="OnRemoveIgnoredApp"
+                                        IsEnabled="{Binding SelectedItem, ElementName=IgnoredList, Converter={StaticResource NotNull}}" />
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                    <TextBlock Text="Nothing you copy in these apps is saved." Style="{StaticResource Footnote}" />
+                </StackPanel>
+            </ScrollViewer>
+        </TabItem>
+
+        <!-- About -->
+        <TabItem Header="About">
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="32">
+                <Image x:Name="AppIcon" Width="72" Height="72" />
+                <TextBlock Text="Tuck" FontSize="22" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,10,0,0" />
+                <TextBlock x:Name="VersionText" FontSize="12" HorizontalAlignment="Center" Margin="0,2,0,0"
+                           Foreground="{DynamicResource Tuck.TextSecondary}" />
+                <TextBlock FontSize="12" TextAlignment="Center" Margin="0,12,0,0" Foreground="{DynamicResource Tuck.TextSecondary}"
+                           Text="A free, open-source clipboard manager.&#x0a;Everything stays on your PC: no network, no telemetry." />
+                <TextBlock Text="Copyright © 2026 Aswin Ravichandran. MIT License." FontSize="11" HorizontalAlignment="Center"
+                           Margin="0,8,0,0" Foreground="{DynamicResource Tuck.TextTertiary}" />
+            </StackPanel>
+        </TabItem>
+    </TabControl>
+</Window>
