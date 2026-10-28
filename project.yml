@@ -4,14 +4,15 @@ options:
   bundleIdPrefix: dev.tuck
   deploymentTarget:
     macOS: "14.0"
-  # Write a project file Xcode 15 can open (newer XcodeGen defaults to Xcode 16's format).
+  # Keep the project file in an older format so it opens in more Xcode versions (newer XcodeGen defaults to Xcode 16+).
   projectFormat: xcode15_0
 packages:
   TuckCore:
     path: Packages/TuckCore
   KeyboardShortcuts:
     url: https://github.com/sindresorhus/KeyboardShortcuts
-    from: "2.0.0"
+    # 3.1.0 fixes shortcut recording on macOS 27. Needs Xcode 26 or later (Swift 6.2).
+    from: "3.1.0"
 targets:
   Tuck:
     type: application

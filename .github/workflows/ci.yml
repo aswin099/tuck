@@ -11,6 +11,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # KeyboardShortcuts 3.x needs Swift 6.2 (Xcode 26+); the runner's default Xcode can be older.
+      - name: Use the newest Xcode
+        run: |
+          sudo xcode-select -s "$(ls -d /Applications/Xcode_*.app | sort -V | tail -1)"
+          xcodebuild -version
+
       - name: Test TuckCore
         run: swift test --package-path Packages/TuckCore
 
