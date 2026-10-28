@@ -98,7 +98,7 @@ It has the same features as the Mac app, with Windows shortcuts. Full details ar
 
 ## Development
 
-Requirements: Xcode 15.4 or later and XcodeGen (see Option 2).
+Requirements: Xcode 26 or later and XcodeGen (see Option 2).
 
 ```bash
 swift test --package-path Packages/TuckCore   # run the core unit tests

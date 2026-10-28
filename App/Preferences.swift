@@ -3,8 +3,8 @@ import KeyboardShortcuts
 import TuckCore
 
 extension KeyboardShortcuts.Name {
-    static let togglePopup = Self("togglePopup", default: .init(.v, modifiers: [.command, .shift]))
-    static let pasteNextInQueue = Self("pasteNextInQueue", default: .init(.v, modifiers: [.command, .control]))
+    static let togglePopup = Self("togglePopup", initial: .init(.v, modifiers: [.command, .shift]))
+    static let pasteNextInQueue = Self("pasteNextInQueue", initial: .init(.v, modifiers: [.command, .control]))
     static let toggleCollecting = Self("toggleCollecting")
 }
 
