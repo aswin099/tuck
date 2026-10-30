@@ -419,3 +419,34 @@ private extension Text {
         font(.system(size: 11)).foregroundStyle(.secondary)
     }
 }
+
+#if DEBUG
+extension SettingsView {
+    /// A Settings window opened on one tab, for demo-mode screenshots. Uses AppKit's toolbar
+    /// tabs, which look the same as the Settings scene's.
+    static func demoWindow(tab: Int) -> NSWindow {
+        let tabs = NSTabViewController()
+        tabs.tabStyle = .toolbar
+        func add(_ title: String, _ symbol: String, _ view: some View) {
+            let host = NSHostingController(rootView: view.frame(width: 520, height: 440))
+            host.title = title
+            let item = NSTabViewItem(viewController: host)
+            item.label = title
+            item.image = NSImage(systemSymbolName: symbol, accessibilityDescription: title)
+            tabs.addTabViewItem(item)
+        }
+        add("General", "gearshape", GeneralSettings())
+        add("History", "clock.arrow.circlepath", HistorySettings())
+        add("Popup", "macwindow", PopupSettings())
+        add("Privacy", "hand.raised", PrivacySettings())
+        add("About", "info.circle", AboutSettings())
+        tabs.selectedTabViewItemIndex = tab
+        let window = NSWindow(contentViewController: tabs)
+        window.styleMask = [.titled, .closable]
+        window.toolbarStyle = .preference
+        window.isReleasedWhenClosed = false
+        window.center()
+        return window
+    }
+}
+#endif
