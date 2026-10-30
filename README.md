@@ -2,7 +2,25 @@
 
 A free, open-source clipboard manager for macOS. Local-only, keyboard-first, MIT licensed.
 
+**Website:** [aswin099.github.io/arcova/tuck](https://aswin099.github.io/arcova/tuck/) · **Download:** [latest release](https://github.com/aswin099/tuck/releases)
+
 > Status: early preview (v0.1). It builds and runs, and the core library has unit tests, but it hasn't had much real-world use yet. Expect rough edges and please [report problems](https://github.com/aswin099/tuck/issues).
+
+<p align="center">
+  <img src="screenshots/popup.png" width="380" alt="The Tuck popup: a search field and recent clipboard items with their source apps and shortcuts">
+</p>
+
+<table>
+  <tr>
+    <td align="center" colspan="2"><img src="screenshots/popup-preview.png" width="640" alt="The popup with the preview pane showing a copied image, its source app, when it was copied and its size"><br><sub><b>Preview pane</b> (⌘Y): the full text or image, where it came from and when</sub></td>
+  </tr>
+  <tr>
+    <td align="center" width="50%"><img src="screenshots/settings-history.png" width="320" alt="Settings, History tab: how many items to keep, for how long, and which kinds"><br><sub><b>History</b>: how much to keep and for how long</sub></td>
+    <td align="center" width="50%"><img src="screenshots/settings-popup.png" width="320" alt="Settings, Popup tab: where the popup opens, the preview pane and what each item shows"><br><sub><b>Popup</b>: where it opens and what it shows</sub></td>
+  </tr>
+</table>
+
+<sub>Screenshots use sample clipboard items (made by the app's debug-only demo mode), not real history.</sub>
 
 ## What it does
 - Remembers what you copy: text, links, images and files
