@@ -19,7 +19,7 @@ struct SettingsView: View {
             AboutSettings()
                 .tabItem { Label("About", systemImage: "info.circle") }
         }
-        .frame(width: 520)
+        .frame(width: 520, height: 440)
         // Tuck has no Dock icon, so bring the window forward when it opens.
         .onAppear { NSApp.activate() }
     }
@@ -67,7 +67,6 @@ private struct GeneralSettings: View {
             }
         }
         .formStyle(.grouped)
-        .frame(height: 450)
         .onChange(of: launchAtLogin) { _, enabled in
             do {
                 if enabled {
@@ -171,7 +170,6 @@ private struct HistorySettings: View {
             }
         }
         .formStyle(.grouped)
-        .frame(height: 610)
         .confirmationDialog("Clear clipboard history?", isPresented: $confirmingClear) {
             Button("Clear History", role: .destructive) { model.clearHistory() }
         } message: {
@@ -241,7 +239,6 @@ private struct PopupSettings: View {
             }
         }
         .formStyle(.grouped)
-        .frame(height: 330)
     }
 }
 
@@ -321,7 +318,6 @@ private struct PrivacySettings: View {
             }
         }
         .formStyle(.grouped)
-        .frame(height: 590)
     }
 
     private func addApps() {
@@ -414,8 +410,7 @@ private struct AboutSettings: View {
                 .foregroundStyle(.tertiary)
         }
         .padding(32)
-        .frame(maxWidth: .infinity)
-        .frame(height: 300)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }
 

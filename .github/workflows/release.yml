@@ -1,8 +1,9 @@
 name: Release
 
 # Push a version tag (for example `git tag v0.2.0 && git push origin v0.2.0`) to build
-# Tuck for macOS and Windows and create a draft GitHub Release with both downloads.
-# Review the draft on GitHub, then click Publish. Tags with a suffix, such as
+# Tuck and create a draft GitHub Release with the downloads. A tag on a commit with the
+# Windows folder (feature/windows for now) builds macOS and Windows; any other tag builds
+# macOS only. Review the draft on GitHub, then click Publish. Tags with a suffix, such as
 # v0.2.0-preview.1, become pre-releases.
 on:
   push:
@@ -12,8 +13,21 @@ permissions:
   contents: write
 
 jobs:
+  detect:
+    name: Check for the Windows app
+    runs-on: ubuntu-latest
+    outputs:
+      windows: ${{ steps.check.outputs.windows }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - id: check
+        run: echo "windows=$([ -d Windows ] && echo true || echo false)" >> "$GITHUB_OUTPUT"
+
   windows:
     name: Windows downloads
+    needs: detect
+    if: needs.detect.outputs.windows == 'true'
     runs-on: windows-latest
     strategy:
       matrix:
@@ -86,6 +100,8 @@ jobs:
   release:
     name: Draft GitHub Release
     needs: [windows, macos]
+    # Runs after a skipped Windows job too, but never after a failed one.
+    if: ${{ !cancelled() && needs.macos.result == 'success' && (needs.windows.result == 'success' || needs.windows.result == 'skipped') }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v4
@@ -100,4 +116,4 @@ jobs:
           if [[ "$GITHUB_REF_NAME" == *-* ]]; then prerelease="--prerelease"; fi
           gh release create "$GITHUB_REF_NAME" --repo "$GITHUB_REPOSITORY" --draft $prerelease \
             --title "Tuck $GITHUB_REF_NAME" --generate-notes \
-            Tuck-macOS.zip Tuck-Windows-x64.zip Tuck-Windows-arm64.zip
+            Tuck-*.zip
