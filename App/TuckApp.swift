@@ -28,6 +28,13 @@ struct TuckApp: App {
 @MainActor
 struct MenuContent: View {
     @ObservedObject var model: AppModel
+    @AppStorage(Pref.autoPaste) private var autoPaste = false
+
+    /// "Paste Next" when Tuck sends ⌘V, "Copy Next" when you press it yourself.
+    private var nextTitle: String {
+        let verb = autoPaste ? "Paste Next" : "Copy Next"
+        return model.queue.isEmpty ? verb : "\(verb) (\(model.queue.count) left)"
+    }
 
     var body: some View {
         Button("Open Tuck") { model.showPopup() }
@@ -35,7 +42,7 @@ struct MenuContent: View {
         Divider()
         Section("Paste Queue") {
             Toggle("Collect New Copies", isOn: $model.isCollecting)
-            Button(model.queue.isEmpty ? "Paste Next" : "Paste Next (\(model.queue.count) left)") {
+            Button(nextTitle) {
                 model.pasteNextInQueue()
             }
             .disabled(model.queue.isEmpty)

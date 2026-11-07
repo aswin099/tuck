@@ -80,8 +80,8 @@ An app you build yourself opens without the security warning.
 ## First launch
 
 - **Tuck has no window or Dock icon.** It lives in the **menu bar** at the top right of your screen (a tray icon). Click it for Open Tuck, Pause Recording, Paste Queue, Settings and Quit.
-- **Press ⇧⌘V** (Shift + Command + V) anywhere to open the clipboard popup. Type to search, use ↑ ↓ to choose and ↩ to paste.
-- **Allow Accessibility so Tuck can paste for you.** The first time you paste, macOS asks for permission. Turn on **Tuck** in **System Settings → Privacy & Security → Accessibility**. Without it, Tuck copies the item and you press ⌘V yourself.
+- **Press ⇧⌘V** (Shift + Command + V) anywhere to open the clipboard popup. Type to search, use ↑ ↓ to choose and ↩ to copy it, then press ⌘V.
+- **Optional: let Tuck paste for you.** Turn on Settings → General → *Paste into the active app*, then allow **Tuck** in **System Settings → Privacy & Security → Accessibility** when macOS asks. ↩ then pastes straight into the app you were using. Tuck needs no permissions until you turn this on.
 - **If a Keychain prompt appears, click Always Allow.** Tuck keeps the key that encrypts your history in your Keychain.
 - **Start Tuck automatically:** Settings → General → *Open Tuck at login*.
 

@@ -44,7 +44,7 @@ enum Pref {
             pollInterval: 0.5,
             ignoredApps: "",
             skipConcealed: true,
-            autoPaste: true,
+            autoPaste: false,
             popupPosition: PopupPosition.cursor.rawValue,
             showPreview: false,
             showMetadata: true,
