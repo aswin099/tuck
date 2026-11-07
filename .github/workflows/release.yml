@@ -92,10 +92,23 @@ jobs:
       - name: Zip
         run: ditto -c -k --keepParent build/Build/Products/Release/Tuck.app Tuck-macOS.zip
 
+      # The .dmg opens a styled window where you drag Tuck into Applications.
+      - name: Make the installer (.dmg)
+        run: |
+          swift tools/dmg/render-background.swift build/dmg
+          tiffutil -cathidpicheck build/dmg/background.png build/dmg/background@2x.png -out build/dmg/background.tiff
+          python3 -m venv build/venv
+          build/venv/bin/pip install --quiet dmgbuild==1.6.7
+          build/venv/bin/dmgbuild -s tools/dmg/settings.py \
+            -D app=build/Build/Products/Release/Tuck.app -D background=build/dmg/background.tiff \
+            Tuck Tuck-macOS.dmg
+
       - uses: actions/upload-artifact@v4
         with:
           name: macos
-          path: Tuck-macOS.zip
+          path: |
+            Tuck-macOS.dmg
+            Tuck-macOS.zip
 
   release:
     name: Draft GitHub Release
@@ -116,4 +129,4 @@ jobs:
           if [[ "$GITHUB_REF_NAME" == *-* ]]; then prerelease="--prerelease"; fi
           gh release create "$GITHUB_REF_NAME" --repo "$GITHUB_REPOSITORY" --draft $prerelease \
             --title "Tuck $GITHUB_REF_NAME" --generate-notes \
-            Tuck-*.zip
+            Tuck-*.dmg Tuck-*.zip
