@@ -40,8 +40,8 @@ You need **macOS 14 Sonoma or later**. There are two ways to install Tuck.
 
 ### Option 1: Download the app (easiest)
 
-1. Open the [Releases page](https://github.com/aswin099/tuck/releases) and download `Tuck-macOS.zip` from the latest release.
-2. Unzip it and drag **Tuck.app** into your **Applications** folder.
+1. Open the [Releases page](https://github.com/aswin099/tuck/releases) and download `Tuck-macOS.dmg` from the latest release.
+2. Open it, drag **Tuck** onto **Applications** in the window that appears, then eject the Tuck disk in Finder. (`Tuck-macOS.zip` has the same app if you'd rather unzip it.)
 3. Open Tuck. Because Tuck is not signed by Apple, macOS shows *"Apple could not verify Tuck is free of malware"*. Click **Done** (not Move to Trash).
 4. Open **System Settings → Privacy & Security**, scroll down to the message about Tuck and click **Open Anyway**. Confirm with your password or Touch ID.
 5. Open Tuck again. You only need to do steps 3–5 once per version.
