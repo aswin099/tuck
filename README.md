@@ -42,8 +42,8 @@ You need **macOS 14 Sonoma or later**. There are two ways to install Tuck.
 
 ### Option 1: Download the app (easiest)
 
-1. Open the [Releases page](https://github.com/aswin099/tuck/releases) and download `Tuck-macOS.zip` from the latest release. If there is no release yet, use Option 2.
-2. Unzip it and drag **Tuck.app** into your **Applications** folder.
+1. Open the [Releases page](https://github.com/aswin099/tuck/releases) and download `Tuck-macOS.dmg` from the latest release.
+2. Open it, drag **Tuck** onto **Applications** in the window that appears, then eject the Tuck disk in Finder. (`Tuck-macOS.zip` has the same app if you'd rather unzip it.)
 3. Open Tuck. Because Tuck is not signed by Apple, macOS shows *"Apple could not verify Tuck is free of malware"*. Click **Done** (not Move to Trash).
 4. Open **System Settings → Privacy & Security**, scroll down to the message about Tuck and click **Open Anyway**. Confirm with your password or Touch ID.
 5. Open Tuck again. You only need to do steps 3–5 once per version.
@@ -89,7 +89,12 @@ An app you build yourself opens without the security warning.
 
 ## Update
 
-Quit Tuck from its menu bar icon, replace **Tuck.app** in Applications with the new version (or for Option 2, run `git pull` in the `tuck` folder and repeat steps 3–5), then open it. Because Tuck isn't signed by Apple, macOS may ask you to allow Accessibility and the Keychain again after an update. Your history is kept.
+Quit Tuck from its menu bar icon, replace **Tuck.app** in Applications with the new version (or for Option 2, run `git pull` in the `tuck` folder and repeat steps 3–5), then open it. Your history is kept.
+
+Because Tuck isn't signed by Apple, macOS treats each new version as a new app:
+
+- **Keychain:** click **Always Allow** when asked. If you click Deny, Tuck keeps new items only until it quits, and your saved history stays safe on disk until you allow it.
+- **Accessibility:** if Tuck stops pasting for you even though it's turned on in System Settings, select Tuck in **Privacy & Security → Accessibility**, remove it with **−**, then add it again with **+**.
 
 ## Uninstall
 
