@@ -29,7 +29,7 @@ struct SettingsView: View {
 
 @MainActor
 private struct GeneralSettings: View {
-    @AppStorage(Pref.autoPaste) private var autoPaste = true
+    @AppStorage(Pref.autoPaste) private var autoPaste = false
     @State private var launchAtLogin = SMAppService.mainApp.status == .enabled
     @State private var isTrusted = AXIsProcessTrusted()
 

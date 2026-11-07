@@ -12,15 +12,16 @@ Install it by following [Option 1 in the README](README.md#option-1-download-the
 - [ ] You could install and open Tuck without help
 - [ ] The Tuck icon shows in the menu bar
 - [ ] ⇧⌘V opens the popup in any app
-- [ ] Pasting asks for Accessibility, and works once it's allowed
+- [ ] Nothing asks for permissions on first run, and ↩ copies the item so ⌘V pastes it
+- [ ] Turning on *Paste into the active app* asks for Accessibility, and ↩ pastes once it's allowed
 
 ### Everyday use
 - [ ] Text, links, images and files all appear in the history
 - [ ] Search finds an old item
-- [ ] ↩ and ⌘1–9 paste into the app you were using
+- [ ] ↩ and ⌘1–9 copy (or paste, with auto-paste on) the item you want
 - [ ] ⌘P pins an item, and ⌘⌫ deletes one
 - [ ] ⌘Y shows the preview pane
-- [ ] ⇥ adds items to the queue, and ⌃⌘V pastes them oldest first
+- [ ] ⇥ adds items to the queue, and ⌃⌘V gives them back oldest first
 
 ### Privacy
 - [ ] A password copied from a password manager isn't saved

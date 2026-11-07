@@ -42,6 +42,9 @@ final class AppModel: ObservableObject {
     private var previousApp: NSRunningApplication?
     private var pruneTimer: Timer?
     private var defaultsObserver: NSObjectProtocol?
+    /// macOS's Accessibility prompt is shown at most once per launch; after that,
+    /// pasting falls back to copying until the permission is granted.
+    private var askedForAccessibility = false
 
     static let listWidth: CGFloat = 380
     static let previewWidth: CGFloat = 320
@@ -63,6 +66,14 @@ final class AppModel: ObservableObject {
         let fileManager = FileManager.default
         if fileManager.fileExists(atPath: legacyURL.path), !fileManager.fileExists(atPath: historyFileURL.path) {
             try? fileManager.moveItem(at: legacyURL, to: historyFileURL)
+        }
+        // Auto-paste used to be on by default. Keep it on for people who already use Tuck,
+        // so it doesn't silently stop after an update; new installs start copy-only and
+        // ask for no permissions until auto-paste is turned on.
+        // Read the saved settings only: `object(forKey:)` would also see the registered default.
+        let saved = Bundle.main.bundleIdentifier.flatMap { UserDefaults.standard.persistentDomain(forName: $0) }
+        if saved?[Pref.autoPaste] == nil, fileManager.fileExists(atPath: historyFileURL.path) {
+            UserDefaults.standard.set(true, forKey: Pref.autoPaste)
         }
 
         let limit = UserDefaults.standard.integer(forKey: Pref.historyLimit)
@@ -212,10 +223,10 @@ final class AppModel: ObservableObject {
         let changeCount = NSPasteboard.general.changeCount
 
         guard defaults.bool(forKey: Pref.autoPaste) else { return }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.12) {
-            if !Paster.sendPaste() {
-                Paster.requestAccessibility()
-            }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.12) { [weak self] in
+            guard let self, !Paster.sendPaste(), !askedForAccessibility else { return }
+            askedForAccessibility = true
+            Paster.requestAccessibility()
         }
         if item.isSecret, defaults.bool(forKey: Pref.clearAfterSecretPaste) {
             // Give the target app time to read the pasteboard, then clear it unless

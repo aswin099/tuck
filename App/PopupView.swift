@@ -17,6 +17,7 @@ struct PopupView: View {
     @EnvironmentObject private var model: AppModel
     @FocusState private var searchFocused: Bool
     @AppStorage(Pref.showKeyHints) private var showKeyHints = true
+    @AppStorage(Pref.autoPaste) private var autoPaste = false
 
     var body: some View {
         HStack(spacing: 0) {
@@ -141,7 +142,7 @@ struct PopupView: View {
 
     private var footer: some View {
         HStack(spacing: 12) {
-            KeyHint(key: "↩", label: "paste")
+            KeyHint(key: "↩", label: autoPaste ? "paste" : "copy")
             KeyHint(key: "⇥", label: "queue")
             KeyHint(key: "⌘Y", label: "preview")
             KeyHint(key: "⌘P", label: "pin")
