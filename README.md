@@ -114,7 +114,7 @@ open Tuck.xcodeproj                           # press Run in Xcode
 
 If Xcode shows a signing error when you press Run, select the **Tuck** target → **Signing & Capabilities** and choose your Personal Team, or set Signing Certificate to **Sign to Run Locally**.
 
-Branches: `develop` for day-to-day work, `staging` for testing a release, `main` for released code. Open pull requests against `develop`.
+Branches: `dev` for day-to-day work, `staging` for testing a release, `main` for released code. Open pull requests against `dev`.
 
 ## Project layout
 | Path | Purpose |
