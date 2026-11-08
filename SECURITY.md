@@ -4,7 +4,7 @@ Tuck handles clipboard history, which can include passwords, keys and personal d
 
 ## Supported versions
 
-Tuck is in early preview. Only the latest release gets security fixes.
+Only the latest release gets security fixes.
 
 | Version | Supported |
 |---|---|

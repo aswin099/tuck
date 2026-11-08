@@ -5,6 +5,10 @@ import AppKit
 final class PopupPanel: NSPanel {
     static let height: CGFloat = 460
 
+    /// Called for ⌘⌫. The search field's editor would otherwise take it as
+    /// "delete to the start of the line", so it's caught here first.
+    var onCommandDelete: (() -> Void)?
+
     init(contentView: NSView) {
         super.init(
             contentRect: NSRect(x: 0, y: 0, width: AppModel.listWidth, height: Self.height),
@@ -29,6 +33,18 @@ final class PopupPanel: NSPanel {
     }
 
     override var canBecomeKey: Bool { true }
+
+    override func performKeyEquivalent(with event: NSEvent) -> Bool {
+        let backspace: UInt16 = 51
+        let forwardDelete: UInt16 = 117
+        let modifiers = event.modifierFlags.intersection(.deviceIndependentFlagsMask)
+        if modifiers == .command, event.keyCode == backspace || event.keyCode == forwardDelete,
+           let onCommandDelete {
+            onCommandDelete()
+            return true
+        }
+        return super.performKeyEquivalent(with: event)
+    }
 
     override func resignKey() {
         super.resignKey()

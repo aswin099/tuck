@@ -183,6 +183,7 @@ final class AppModel: ObservableObject {
         if panel == nil {
             let host = NSHostingView(rootView: PopupView().environmentObject(self))
             panel = PopupPanel(contentView: host)
+            panel?.onCommandDelete = { [weak self] in self?.deleteSelected() }
         }
         focusToken += 1
         let position = PopupPosition(rawValue: defaults.string(forKey: Pref.popupPosition) ?? "") ?? .cursor
