@@ -4,7 +4,7 @@ A free, open-source clipboard manager for macOS. Local-only, keyboard-first, MIT
 
 **Website:** [aswin099.github.io/arcova/tuck](https://aswin099.github.io/arcova/tuck/) · **Download:** [latest release](https://github.com/aswin099/tuck/releases)
 
-> Status: early preview (v0.1). It builds and runs, and the core library has unit tests, but it hasn't had much real-world use yet. Expect rough edges and please [report problems](https://github.com/aswin099/tuck/issues).
+> Status: version 1.0 for Mac. Found a problem or have an idea? Please [open an issue](https://github.com/aswin099/tuck/issues).
 
 <p align="center">
   <img src="screenshots/popup.png" width="380" alt="The Tuck popup: a search field and recent clipboard items with their source apps and shortcuts">

@@ -1,8 +1,8 @@
 # Testing Tuck
 
-Thanks for trying Tuck before its first full release. This takes about 15 minutes, then just use it as normal for a week.
+Thanks for helping test Tuck. This takes about 15 minutes, then just use it as normal for a week.
 
-Tuck is a preview, so don't rely on it for anything you can't copy again. Please [open an issue](https://github.com/aswin099/tuck/issues/new/choose) for anything that goes wrong or confuses you, and include your macOS or Windows version.
+Please [open an issue](https://github.com/aswin099/tuck/issues/new/choose) for anything that goes wrong or confuses you, and include your macOS or Windows version.
 
 ## Mac
 
