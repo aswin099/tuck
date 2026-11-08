@@ -29,6 +29,7 @@ struct TuckApp: App {
 struct MenuContent: View {
     @ObservedObject var model: AppModel
     @AppStorage(Pref.autoPaste) private var autoPaste = false
+    @Environment(\.openSettings) private var openSettings
 
     /// "Paste Next" when Tuck sends ⌘V, "Copy Next" when you press it yourself.
     private var nextTitle: String {
@@ -50,8 +51,11 @@ struct MenuContent: View {
                 .disabled(model.queue.isEmpty && !model.isCollecting)
         }
         Divider()
-        SettingsLink { Text("Settings…") }
-            .keyboardShortcut(",")
+        Button("Settings…") {
+            openSettings()
+            model.bringSettingsToFront()
+        }
+        .keyboardShortcut(",")
         Button("Clear History…") { model.confirmClearHistory() }
         Divider()
         Button("Quit Tuck") { NSApplication.shared.terminate(nil) }

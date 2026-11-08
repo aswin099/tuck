@@ -20,8 +20,6 @@ struct SettingsView: View {
                 .tabItem { Label("About", systemImage: "info.circle") }
         }
         .frame(width: 520, height: 440)
-        // Tuck has no Dock icon, so bring the window forward when it opens.
-        .onAppear { NSApp.activate() }
     }
 }
 
@@ -385,8 +383,7 @@ private struct AboutSettings: View {
     private var version: String {
         let info = Bundle.main.infoDictionary
         let short = info?["CFBundleShortVersionString"] as? String ?? "–"
-        let build = info?["CFBundleVersion"] as? String ?? "–"
-        return "Version \(short) (\(build))"
+        return "Version \(short)"
     }
 
     var body: some View {
