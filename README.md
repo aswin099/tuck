@@ -25,9 +25,9 @@ A free, open-source clipboard manager for macOS. Local-only, keyboard-first, MIT
 ## What it does
 - Remembers what you copy: text, links, images and files
 - Global hotkey (default ⇧⌘V) opens a search popup near your cursor
-- Type to search, ↩ to paste, ⌘1–9 to paste the Nth item, ⌘P to pin, ⌘⌫ to delete
+- Type to search, ↩ to copy the item (or paste it, with auto-paste on), ⌘1–9 to pick the Nth item, ⌘P to pin, ⌘⌫ to delete
 - Preview pane (⌘Y) with the full text, image or file list, source app, time and size
-- Paste queue: press ⇥ on items (or turn on "Collect New Copies"), then ⌃⌘V pastes them one by one, oldest first
+- Paste queue: press ⇥ on items (or turn on "Collect New Copies"), then ⌃⌘V gives them back one by one, oldest first
 - Secret detection: API keys, tokens, private keys, card numbers and random-looking passwords are hidden and deleted after a few minutes (or not saved at all), and the clipboard is cleared after you paste one
 - Skips copies marked concealed or transient (password managers), plus any apps you list
 - Menu bar item with Pause, Paste Queue, Settings and Clear History
@@ -137,6 +137,9 @@ History is stored in `~/Library/Application Support/Tuck/history.tuck`, readable
 - Filters by type and source app in the popup UI
 - Signed and notarized releases, Homebrew cask
 - XCUITest popup flows
+
+## Changes
+See [CHANGELOG.md](CHANGELOG.md) for what's new in each version.
 
 ## Contributing
 See [CONTRIBUTING.md](CONTRIBUTING.md).
