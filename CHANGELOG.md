@@ -2,6 +2,12 @@
 
 All notable changes to Tuck. Versions follow [semantic versioning](https://semver.org).
 
+## 1.0.1 (2026-11-07)
+
+### Fixed
+- Settings now always opens in front of other windows. It could open behind them when you opened it a second time.
+- The About tab shows "Version 1.0.1" without the build number in brackets.
+
 ## 1.0.0 (2026-11-07)
 
 The first full release of Tuck for Mac. Windows builds stay in preview until they've been tested on a real PC; the latest one is [0.1.0-preview.9](https://github.com/aswin099/tuck/releases/tag/v0.1.0-preview.9).
