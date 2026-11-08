@@ -66,11 +66,6 @@ struct PopupView: View {
                 .onKeyPress(.upArrow) { model.move(-1); return .handled }
                 .onKeyPress(.escape) { model.hidePopup(); return .handled }
                 .onKeyPress(.tab) { model.toggleQueuedSelected(); return .handled }
-                .onKeyPress(keys: [.delete]) { press in
-                    guard press.modifiers.contains(.command) else { return .ignored }
-                    model.deleteSelected()
-                    return .handled
-                }
                 .onKeyPress(characters: .decimalDigits) { press in
                     guard press.modifiers == .command,
                           let number = Int(press.characters), number >= 1 else { return .ignored }
@@ -241,9 +236,13 @@ struct ItemRow: View {
 
     var body: some View {
         HStack(spacing: 10) {
-            Circle()
-                .fill(item.isPinned ? Color.tuckAmber : Color.clear)
-                .frame(width: 6, height: 6)
+            Image(systemName: "pin.fill")
+                .font(.system(size: 10, weight: .semibold))
+                .rotationEffect(.degrees(45))
+                .foregroundStyle(Color.tuckAmber)
+                .opacity(item.isPinned ? 1 : 0)
+                .frame(width: 12)
+                .help(item.isPinned ? "Pinned" : "")
                 .accessibilityLabel(item.isPinned ? "Pinned" : "")
             content
             Spacer(minLength: 4)
