@@ -258,6 +258,17 @@ final class AppModel: ObservableObject {
         refresh()
     }
 
+    /// Tuck has no Dock icon, so macOS doesn't bring its Settings window forward on its
+    /// own, and SwiftUI only runs `onAppear` the first time. Call this after opening it.
+    func bringSettingsToFront() {
+        DispatchQueue.main.async {
+            NSApp.activate()
+            let window = NSApp.windows.first { $0.identifier?.rawValue == "com_apple_SwiftUI_Settings_window" }
+            window?.makeKeyAndOrderFront(nil)
+            window?.orderFrontRegardless()
+        }
+    }
+
     /// Asks before clearing, as the menu bar item cannot be undone.
     func confirmClearHistory() {
         let alert = NSAlert()
