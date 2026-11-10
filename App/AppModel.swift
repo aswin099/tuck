@@ -54,6 +54,17 @@ final class AppModel: ObservableObject {
 
     private init() {
         Pref.registerDefaults()
+        #if DEBUG
+        // Demo mode (README screenshots): sample history in memory only. No history file,
+        // no Keychain, no clipboard monitoring.
+        if DemoMode.isOn {
+            historyFileURL = FileManager.default.temporaryDirectory.appendingPathComponent("tuck-demo.tuck")
+            storageStatus = .encrypted
+            store = HistoryStore(maxItems: 200)
+            monitor = PasteboardMonitor(rules: UserDefaults.standard.ignoreRules)
+            return
+        }
+        #endif
         let support = FileManager.default
             .urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
             .appendingPathComponent("Tuck", isDirectory: true)
@@ -95,6 +106,14 @@ final class AppModel: ObservableObject {
     }
 
     func start() {
+        #if DEBUG
+        if DemoMode.isOn {
+            DemoMode.sampleItems().forEach { _ = store.add($0) }
+            refresh()
+            DemoMode.capture(self)
+            return
+        }
+        #endif
         monitor.onItem = { [weak self] item in
             self?.ingest(item)
         }
@@ -174,6 +193,11 @@ final class AppModel: ObservableObject {
     func hidePopup() {
         panel?.orderOut(nil)
     }
+
+    #if DEBUG
+    /// For demo-mode screenshots.
+    var demoPanel: NSWindow? { panel }
+    #endif
 
     // MARK: - Actions
 

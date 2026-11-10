@@ -17,7 +17,7 @@ open Tuck.xcodeproj
 
 ## Issues and pull requests
 - Use the **Bug report** or **Feature request** form when opening an issue.
-- Open pull requests against `dev`. The pull request template has a short checklist.
+- Open pull requests against `main`. The pull request template has a short checklist.
 - Report security problems privately, as described in [SECURITY.md](SECURITY.md).
 - Everyone taking part follows the [code of conduct](CODE_OF_CONDUCT.md).
 

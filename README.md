@@ -138,7 +138,7 @@ dotnet build Windows/Tuck.Windows.slnx        # build the app (it runs only on W
 
 If Xcode shows a signing error when you press Run, select the **Tuck** target → **Signing & Capabilities** and choose your Personal Team, or set Signing Certificate to **Sign to Run Locally**.
 
-Branches: `dev` for day-to-day work, `staging` for testing a release, `main` for released code. Open pull requests against `dev`.
+Branches: `main` holds the latest code and releases are tagged from it. Do new work on a `feature/…` or `fix/…` branch and open a pull request against `main`.
 
 Releases: push a version tag such as `v0.2.0`. GitHub Actions then builds the macOS and Windows downloads and creates a draft release to review and publish.
 

@@ -9,12 +9,12 @@
 
 ## Checklist
 
-- [ ] One change per pull request, aimed at the `dev` branch
+- [ ] One change per pull request, aimed at the `main` branch
 - [ ] Core tests pass: `swift test --package-path Packages/TuckCore` and/or `dotnet test Windows/tests/Tuck.Core.Tests`
 - [ ] New logic in TuckCore / Tuck.Core has tests
-- [ ] UI changes follow [DESIGN.md](https://github.com/aswin099/tuck/blob/dev/DESIGN.md) and were checked in light and dark mode
+- [ ] UI changes follow [DESIGN.md](https://github.com/aswin099/tuck/blob/main/DESIGN.md) and were checked in light and dark mode
 - [ ] No network calls, analytics or accounts added
-- [ ] Original work only, nothing copied from other apps (see [CONTRIBUTING.md](https://github.com/aswin099/tuck/blob/dev/CONTRIBUTING.md))
+- [ ] Original work only, nothing copied from other apps (see [CONTRIBUTING.md](https://github.com/aswin099/tuck/blob/main/CONTRIBUTING.md))
 - [ ] No real clipboard contents, passwords or keys in code, tests or screenshots
 
 ## How I tested it
